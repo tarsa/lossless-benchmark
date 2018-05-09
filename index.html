@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+          crossorigin="anonymous">
+
+    <title>lossless-benchmark</title>
+</head>
+<body>
+<div class="container" style="max-width: 90%;">
+    <h1>enwik8 &amp; enwik9</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="border-bottom-0 pb-0 text-left">Compression program</th>
+            <th class="border-bottom-0 pb-0 text-left">Options</th>
+            <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
+            <th class="border-bottom-0 pb-0 text-right">Decompressor size (zip)</th>
+            <th class="border-bottom-0 pb-0 text-right"><big>Total size</big></th>
+            <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
+            <th class="border-bottom-0 pb-0 text-right">Mem</th>
+            <th class="border-bottom-0 pb-0 text-left">Alg</th>
+            <th class="border-bottom-0 pb-0 text-right">Note</th>
+        </tr>
+        <tr>
+            <th class="border-top-0 pt-0" colspan="2"></th>
+            <th class="border-top-0 pt-0 text-right">enwik8</th>
+            <th class="border-top-0 pt-0 text-right">enwik9</th>
+            <th class="border-top-0 pt-0"></th>
+            <th class="border-top-0 pt-0 text-right">enwik9 + prog</th>
+            <th class="border-top-0 pt-0 text-right">Comp</th>
+            <th class="border-top-0 pt-0 text-right">Decomp</th>
+            <th class="border-top-0 pt-0" colspan="3"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-left">Paq8pxd_v47_3</td>
+            <td class="text-left">-s15</td>
+            <td class="text-right">16,038,418</td>
+            <td class="text-right">126,749,584</td>
+            <td class="text-right">???</td>
+            <td class="text-right">???</td>
+            <td class="text-right">83,435</td>
+            <td class="text-right">86,671</td>
+            <td class="text-right">27,600</td>
+            <td class="text-left">CM</td>
+            <td class="text-right"><a href="#note-1">1</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <h3>Notes</h3>
+    <ol>
+        <li id="note-1">Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.</li>
+    </ol>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+</body>
+</html>

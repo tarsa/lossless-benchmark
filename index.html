@@ -40,7 +40,9 @@
             </table>
             <h3>Notes</h3>
             <ol>
-                <li id="note-1">Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.</li>
+                <li id="note-1">
+                    Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.
+                </li>
             </ol>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -62,7 +64,7 @@
                     total_compressed_size,
                     compression_time,
                     decompression_time,
-                    memory_usage_in_kb,
+                    memory_usage_in_mb,
                     algorithm_type,
                     note_id) {
                 return {
@@ -74,7 +76,7 @@
                     total_compressed_size: total_compressed_size,
                     compression_time: compression_time,
                     decompression_time: decompression_time,
-                    memory_usage_in_kb: memory_usage_in_kb,
+                    memory_usage_in_mb: memory_usage_in_mb,
                     algorithm_type: algorithm_type,
                     note_id: note_id
                 };
@@ -84,7 +86,12 @@
                         "Paq8pxd_v47_3", "-s15",
                         "16,038,418", "126,749,584",
                         "???", "???",
-                        "83,435", "86,671", "27,600", "CM", "1")
+                        "83,435", "86,671", "27,600", "CM", "1"),
+                enwik_result(
+                        "CMV v00.01.01", "-m2,3,0x03ed7dfb",
+                        "18,122,372", "149,357,765",
+                        "???", "???",
+                        "426,163", "394,855", "3,335", "CM", "1")
             ];
             function fill_enwik_table() {
                 var body = $("#enwik_results_body");
@@ -100,9 +107,10 @@
                     row.append("<td class=\"text-right\">" + result.total_compressed_size + "</td>");
                     row.append("<td class=\"text-right\">" + result.compression_time + "</td>");
                     row.append("<td class=\"text-right\">" + result.decompression_time + "</td>");
-                    row.append("<td class=\"text-right\">" + result.memory_usage_in_kb + "</td>");
+                    row.append("<td class=\"text-right\">" + result.memory_usage_in_mb + "</td>");
                     row.append("<td class=\"text-left\">" + result.algorithm_type + "</td>");
-                    row.append("<td class=\"text-right\"><a href=\"#note-" + result.note_id + "\">" + result.note_id + "</a></td>");
+                    row.append("<td class=\"text-right\"><a href=\"#note-" + result.note_id + "\">" + result.note_id +
+                            "</a></td>");
                     body.append(row);
                 }
             }

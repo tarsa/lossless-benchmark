@@ -69,10 +69,10 @@
                     </tr>
                     <tr>
                         <th class="border-top-0 pt-0" colspan="2"></th>
-                        <th class="border-top-0 pt-0 text-right">enwik8</th>
-                        <th class="border-top-0 pt-0 text-right">enwik9</th>
+                        <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
+                        <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
                         <th class="border-top-0 pt-0"></th>
-                        <th class="border-top-0 pt-0 text-right">enwik9 + prog</th>
+                        <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
                         <th class="border-top-0 pt-0 text-right">Comp</th>
                         <th class="border-top-0 pt-0 text-right">Decomp</th>
                         <th class="border-top-0 pt-0" colspan="3"></th>
@@ -144,12 +144,28 @@
                         "123,123", "123,246,246",
                         "23,456", "23,456", "1,234", "FAKE", "0"),
                 enwik_result(
+                        "fake v1", "--test",
+                        "3,123,123", "23,123,123",
+                        "123,123", "23,246,246",
+                        "823,456", "823,456", "81,234", "FAKE", "0"),
+                enwik_result(
                         "fake v1", "--best",
                         "20,000,000", "100,000,000", "123,123", "100,123,123",
                         "123,456", "123,456", "12,345", "FAKE", "0")
             ];
             // enwik results end
             $("#enwik_results_dump").val(JSON.stringify(enwik_results_by_series));
+            var enwik_sorted_columns_by_field = {
+                compressed_enwik8_size: "enwik8_size_column",
+                compressed_enwik9_size: "enwik9_size_column",
+                total_compressed_size: "enwik_total_size_column"
+            };
+            $.each(enwik_sorted_columns_by_field, function (field_name) {
+                var column_name = enwik_sorted_columns_by_field[field_name];
+                $("#" + column_name).click(function () {
+                    fill_enwik_table(field_name);
+                });
+            });
             var shown_series_selector = $("#enwik_shown_series");
             var collapsed_series_selector = $("#enwik_collapsed_series");
             for (var results_key in enwik_results_by_series) {
@@ -170,7 +186,16 @@
             collapsed_series_selector.change(function () {
                 fill_enwik_table();
             });
-            function fill_enwik_table() {
+            function fill_enwik_table(sorted_column) {
+                sorted_column = sorted_column || "total_compressed_size";
+                for (var field_name in enwik_sorted_columns_by_field) {
+                    var column_id = enwik_sorted_columns_by_field[field_name];
+                    if (field_name === sorted_column) {
+                        $("#" + column_id).css("text-decoration", "underline");
+                    } else {
+                        $("#" + column_id).css("text-decoration", "");
+                    }
+                }
                 var results_to_show = new Set();
                 shown_series_selector.find("option").each(function () {
                     if ($(this).prop("selected")) {
@@ -196,6 +221,14 @@
                         }
                     }
                 }
+                enwik_results.sort(function (a, b) {
+                    if (a[sorted_column].length !== b[sorted_column].length) {
+                        return a[sorted_column].length - b[sorted_column].length;
+                    } else {
+                        return a[sorted_column] === b[sorted_column] ? 0 :
+                                a[sorted_column] < b[sorted_column] ? -1 : 1;
+                    }
+                });
                 var body = $("#enwik_results_body");
                 body.empty();
                 for (var index = 0; index < enwik_results.length; index++) {

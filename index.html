@@ -32,13 +32,29 @@
                     </li>
                 </ul>
             </div>
+            <form>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="enwik_shown_series">Show compressor series</label>
+                        <select multiple class="form-control" id="enwik_shown_series">
+                            <!--filled in script-->
+                        </select>
+                    </div>
+                    <div class="col form-group">
+                        <label for="enwik_expanded_series">Show only first result in series</label>
+                        <select multiple class="form-control" id="enwik_collapsed_series">
+                            <!--filled in script-->
+                        </select>
+                    </div>
+                </div>
+            </form>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th class="border-bottom-0 pb-0 text-left">Compression program</th>
                         <th class="border-bottom-0 pb-0 text-left">Options</th>
                         <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
-                        <th class="border-bottom-0 pb-0 text-right">Decompressor size (zip)</th>
+                        <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
                         <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
                         <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
                         <th class="border-bottom-0 pb-0 text-right">Mem</th>
@@ -101,19 +117,81 @@
                     note_id: note_id
                 };
             }
-            var enwik_results = [
-                enwik_result(
-                        "Paq8pxd_v47_3", "-s15",
-                        "16,038,418", "126,749,584",
-                        "???", "???",
-                        "83,435", "86,671", "27,600", "CM", "1"),
+            // enwik results begin
+            var enwik_results_by_series = {};
+            enwik_results_by_series['CMV'] = [
                 enwik_result(
                         "CMV v00.01.01", "-m2,3,0x03ed7dfb",
                         "18,122,372", "149,357,765",
                         "???", "???",
                         "426,163", "394,855", "3,335", "CM", "1")
             ];
+            enwik_results_by_series['PAQ'] = [
+                enwik_result(
+                        "Paq8pxd_v47_3", "-s15",
+                        "16,038,418", "126,749,584",
+                        "???", "???",
+                        "83,435", "86,671", "27,600", "CM", "1")
+            ];
+            enwik_results_by_series['fake'] = [
+                enwik_result(
+                        "fake v1", "--fast",
+                        "23,123,123", "123,123,123",
+                        "123,123", "123,246,246",
+                        "23,456", "23,456", "1,234", "FAKE", "0"),
+                enwik_result(
+                        "fake v1", "--best",
+                        "20,000,000", "100,000,000",
+                        "123,123", "100,123,123",
+                        "123,456", "123,456", "12,345", "FAKE", "0")
+            ];
+            // enwik results end
+            var shown_series_selector = $("#enwik_shown_series");
+            var collapsed_series_selector = $("#enwik_collapsed_series");
+            for (var results_key in enwik_results_by_series) {
+                shown_series_selector.append("<option selected=\"selected\">" + results_key + "</option>");
+            }
+            shown_series_selector.change(function () {
+                collapsed_series_selector.empty();
+                collapsed_series_selector.append("<option></option>");
+                $(this).find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        collapsed_series_selector.append("<option selected=\"selected\">" + $(this).val() +
+                                "</option>");
+                    }
+                });
+                fill_enwik_table();
+            });
+            shown_series_selector.change();
+            collapsed_series_selector.change(function () {
+                fill_enwik_table();
+            });
             function fill_enwik_table() {
+                var results_to_show = new Set();
+                shown_series_selector.find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        results_to_show.add($(this).val());
+                    }
+                });
+                var results_to_collapse = new Set();
+                collapsed_series_selector.find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        results_to_collapse.add($(this).val());
+                    }
+                });
+                var enwik_results = [];
+                for (var results_key in enwik_results_by_series) {
+                    if (results_to_show.has(results_key)) {
+                        var results = enwik_results_by_series[results_key];
+                        if (results_to_collapse.has(results_key)) {
+                            enwik_results.push(results[0]);
+                        } else {
+                            for (var result of results) {
+                                enwik_results.push(result);
+                            }
+                        }
+                    }
+                }
                 var body = $("#enwik_results_body");
                 body.empty();
                 for (var index = 0; index < enwik_results.length; index++) {

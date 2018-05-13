@@ -47,6 +47,12 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
+                    </div>
+                </div>
             </form>
             <table class="table table-striped">
                 <thead>
@@ -143,6 +149,7 @@
                         "123,456", "123,456", "12,345", "FAKE", "0")
             ];
             // enwik results end
+            $("#enwik_results_dump").val(JSON.stringify(enwik_results_by_series));
             var shown_series_selector = $("#enwik_shown_series");
             var collapsed_series_selector = $("#enwik_collapsed_series");
             for (var results_key in enwik_results_by_series) {

@@ -57,7 +57,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th class="border-bottom-0 pb-0 text-left">Compression program</th>
+                        <th class="border-bottom-0 pb-0 text-left">Program series</th>
+                        <th class="border-bottom-0 pb-0 text-left">Program name</th>
                         <th class="border-bottom-0 pb-0 text-left">Options</th>
                         <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
                         <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
@@ -68,7 +69,7 @@
                         <th class="border-bottom-0 pb-0 text-right">Note</th>
                     </tr>
                     <tr>
-                        <th class="border-top-0 pt-0" colspan="2"></th>
+                        <th class="border-top-0 pt-0" colspan="3"></th>
                         <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
                         <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
                         <th class="border-top-0 pt-0"></th>
@@ -96,80 +97,39 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
                 integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js" 
+                integrity="sha256-F8eQhL9KDGgaDitxiSyq6SnTCL0m67rt7niivBtH2rc=" 
+        crossorigin="anonymous"></script>
         <script type="text/javascript">
             "use strict";
-            function enwik_result(program_name,
-                    program_options,
-                    compressed_enwik8_size,
-                    compressed_enwik9_size,
-                    decompressor_size,
-                    total_compressed_size,
-                    compression_time,
-                    decompression_time,
-                    memory_usage_in_mb,
-                    algorithm_type,
-                    note_id) {
-                return {
-                    program_name: program_name,
-                    program_options: program_options,
-                    compressed_enwik8_size: compressed_enwik8_size,
-                    compressed_enwik9_size: compressed_enwik9_size,
-                    decompressor_size: decompressor_size,
-                    total_compressed_size: total_compressed_size,
-                    compression_time: compression_time,
-                    decompression_time: decompression_time,
-                    memory_usage_in_mb: memory_usage_in_mb,
-                    algorithm_type: algorithm_type,
-                    note_id: note_id
-                };
-            }
-            // enwik results begin
-            var enwik_results_by_series = {};
-            enwik_results_by_series['CMV'] = [
-                enwik_result(
-                        "CMV v00.01.01", "-m2,3,0x03ed7dfb",
-                        "18,122,372", "149,357,765", "78,922", "149,436,687",
-                        "426,163", "394,855", "3,335", "CM", "1")
-            ];
-            enwik_results_by_series['PAQ'] = [
-                enwik_result(
-                        "Paq8pxd_v47_3", "-s15",
-                        "16,038,418", "126,749,584", "150,210", "126,899,794",
-                        "83,435", "86,671", "27,600", "CM", "1")
-            ];
-            enwik_results_by_series['fake'] = [
-                enwik_result(
-                        "fake v1", "--fast",
-                        "93,123,123", "923,123,123",
-                        "123,123", "923,246,246",
-                        "23,456", "23,456", "1,234", "FAKE", "0"),
-                enwik_result(
-                        "fake v1", "--test",
-                        "3,123,123", "23,123,123",
-                        "123,123", "23,246,246",
-                        "823,456", "823,456", "81,234", "FAKE", "0"),
-                enwik_result(
-                        "fake v1", "--best",
-                        "20,000,000", "100,000,000", "123,123", "100,123,123",
-                        "123,456", "123,456", "12,345", "FAKE", "0")
-            ];
-            // enwik results end
-            $("#enwik_results_dump").val(JSON.stringify(enwik_results_by_series));
+            var enwik_results_csv = String.raw`
+"program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id"
+"CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1"
+"PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1"
+"fake","fake v1","--fast","93,123,123","923,123,123","123,123","923,246,246","23,456","23,456","1,234","FAKE","0"
+"fake","fake v1","--test","3,123,123","23,123,123","123,123","23,246,246","823,456","823,456","81,234","FAKE","0"
+"fake","fake v1","--best","20,000,000","100,000,000","123,123","100,123,123","123,456","123,456","12,345","FAKE","0"
+`.trim();
+            var enwik_results_all = $.csv.toObjects(enwik_results_csv);
+            var enwik_program_series = new Set();
+            $.each(enwik_results_all, function (index, result) {
+                enwik_program_series.add(result.program_series);
+            });
+            $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
             var enwik_sorted_columns_by_field = {
                 compressed_enwik8_size: "enwik8_size_column",
                 compressed_enwik9_size: "enwik9_size_column",
                 total_compressed_size: "enwik_total_size_column"
             };
-            $.each(enwik_sorted_columns_by_field, function (field_name) {
-                var column_name = enwik_sorted_columns_by_field[field_name];
+            $.each(enwik_sorted_columns_by_field, function (field_name, column_name) {
                 $("#" + column_name).click(function () {
                     fill_enwik_table(field_name);
                 });
             });
             var shown_series_selector = $("#enwik_shown_series");
             var collapsed_series_selector = $("#enwik_collapsed_series");
-            for (var results_key in enwik_results_by_series) {
-                shown_series_selector.append("<option selected=\"selected\">" + results_key + "</option>");
+            for (var program_series of enwik_program_series) {
+                shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
             }
             shown_series_selector.change(function () {
                 collapsed_series_selector.empty();
@@ -188,38 +148,34 @@
             });
             function fill_enwik_table(sorted_column) {
                 sorted_column = sorted_column || "total_compressed_size";
-                for (var field_name in enwik_sorted_columns_by_field) {
-                    var column_id = enwik_sorted_columns_by_field[field_name];
+                $.each(enwik_sorted_columns_by_field, function (field_name, column_id) {
                     if (field_name === sorted_column) {
                         $("#" + column_id).css("text-decoration", "underline");
                     } else {
                         $("#" + column_id).css("text-decoration", "");
                     }
-                }
-                var results_to_show = new Set();
+                });
+                var series_to_show = new Set();
                 shown_series_selector.find("option").each(function () {
                     if ($(this).prop("selected")) {
-                        results_to_show.add($(this).val());
+                        series_to_show.add($(this).val());
                     }
                 });
-                var results_to_collapse = new Set();
+                var series_to_collapse = new Set();
                 collapsed_series_selector.find("option").each(function () {
                     if ($(this).prop("selected")) {
-                        results_to_collapse.add($(this).val());
+                        series_to_collapse.add($(this).val());
                     }
                 });
                 var enwik_results = [];
-                for (var results_key in enwik_results_by_series) {
-                    if (results_to_show.has(results_key)) {
-                        var results = enwik_results_by_series[results_key];
-                        if (results_to_collapse.has(results_key)) {
-                            enwik_results.push(results[0]);
-                        } else {
-                            for (var result of results) {
-                                enwik_results.push(result);
-                            }
-                        }
+                var seen_series = new Set();
+                for (var single_result of enwik_results_all) {
+                    var series = single_result.program_series;
+                    if (series_to_show.has(series) &&
+                            !(series_to_collapse.has(series) && seen_series.has(series))) {
+                        enwik_results.push(single_result);
                     }
+                    seen_series.add(series);
                 }
                 enwik_results.sort(function (a, b) {
                     if (a[sorted_column].length !== b[sorted_column].length) {
@@ -234,6 +190,7 @@
                 for (var index = 0; index < enwik_results.length; index++) {
                     var result = enwik_results[index];
                     var row = $("<tr></tr>");
+                    row.append("<td class=\"text-left\">" + result.program_series + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_name + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_options + "</td>");
                     row.append("<td class=\"text-right\">" + result.compressed_enwik8_size + "</td>");

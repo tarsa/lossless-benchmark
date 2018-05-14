@@ -41,8 +41,14 @@
                         </select>
                     </div>
                     <div class="col form-group">
-                        <label for="enwik_collapsed_series">Show only first result in series</label>
+                        <label for="enwik_collapsed_series">Show only first non-outdated result in series</label>
                         <select multiple class="form-control" id="enwik_collapsed_series">
+                            <!--filled in script-->
+                        </select>
+                    </div>
+                    <div class="col form-group">
+                        <label for="enwik_outdated_series">Show outdated results</label>
+                        <select multiple class="form-control" id="enwik_outdated_series">
                             <!--filled in script-->
                         </select>
                     </div>
@@ -57,6 +63,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th class="border-bottom-0 pb-0 text-left">#</th>
                         <th class="border-bottom-0 pb-0 text-left">Program series</th>
                         <th class="border-bottom-0 pb-0 text-left">Program name</th>
                         <th class="border-bottom-0 pb-0 text-left">Options</th>
@@ -69,7 +76,7 @@
                         <th class="border-bottom-0 pb-0 text-right">Note</th>
                     </tr>
                     <tr>
-                        <th class="border-top-0 pt-0" colspan="3"></th>
+                        <th class="border-top-0 pt-0" colspan="4"></th>
                         <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
                         <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
                         <th class="border-top-0 pt-0"></th>
@@ -102,17 +109,27 @@
         crossorigin="anonymous"></script>
         <script>
             "use strict";
+            function assert(condition, message) {
+                if (!condition) {
+                    message = message || "Assertion failed";
+                    if (typeof Error !== "undefined") {
+                        throw new Error(message);
+                    }
+                    throw message; // Fallback
+                }
+            }
             var enwik_results_csv = String.raw`
-"program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id"
-"CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1"
-"PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1"
-"fake","fake v1","--fast","93,123,123","923,123,123","123,123","923,246,246","23,456","23,456","1,234","FAKE","0"
-"fake","fake v1","--test","3,123,123","23,123,123","123,123","23,246,246","823,456","823,456","81,234","FAKE","0"
-"fake","fake v1","--best","20,000,000","100,000,000","123,123","100,123,123","123,456","123,456","12,345","FAKE","0"
+"program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id","outdated"
+"CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1","yes"
+"PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1","no"
+"fake","fake v1","--fast","93,123,123","923,123,123","123,123","923,246,246","23,456","23,456","1,234","FAKE","0","no"
+"fake","fake v1","--test","3,123,123","23,123,123","123,123","23,246,246","823,456","823,456","81,234","FAKE","0","yes"
+"fake","fake v1","--best","20,000,000","100,000,000","123,123","100,123,123","123,456","123,456","12,345","FAKE","0","no"
 `.trim();
             var enwik_results_all = $.csv.toObjects(enwik_results_csv);
             var enwik_program_series = new Set();
             $.each(enwik_results_all, function (index, result) {
+                assert(result.outdated === "yes" || result.outdated === "no");
                 enwik_program_series.add(result.program_series);
             });
             $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
@@ -128,24 +145,59 @@
             });
             var shown_series_selector = $("#enwik_shown_series");
             var collapsed_series_selector = $("#enwik_collapsed_series");
+            var outdated_series_selector = $("#enwik_outdated_series");
+            function find_series_to_show() {
+                var series_to_show = new Set();
+                shown_series_selector.find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        series_to_show.add($(this).val());
+                    }
+                });
+                return series_to_show;
+            }
+            function find_series_to_collapse() {
+                var series_to_collapse = new Set();
+                collapsed_series_selector.find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        series_to_collapse.add($(this).val());
+                    }
+                });
+                return series_to_collapse;
+            }
+            function find_series_with_outdated_results() {
+                var series_with_outdated_results = new Set();
+                outdated_series_selector.find("option").each(function () {
+                    if ($(this).prop("selected")) {
+                        series_with_outdated_results.add($(this).val());
+                    }
+                });
+                return series_with_outdated_results;
+            }
             for (var program_series of enwik_program_series) {
                 shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
             }
             shown_series_selector.change(function () {
                 collapsed_series_selector.empty();
                 collapsed_series_selector.append("<option></option>");
-                $(this).find("option").each(function () {
-                    if ($(this).prop("selected")) {
-                        collapsed_series_selector.append("<option selected=\"selected\">" + $(this).val() +
-                                "</option>");
+                for (var series of find_series_to_show()) {
+                    collapsed_series_selector.append("<option selected=\"selected\">" + series + "</option>");
+                }
+                collapsed_series_selector.change();
+            });
+            collapsed_series_selector.change(function () {
+                outdated_series_selector.empty();
+                var series_to_collapse = find_series_to_collapse();
+                for (var series of find_series_to_show()) {
+                    if (!series_to_collapse.has(series)) {
+                        outdated_series_selector.append("<option>" + series + "</option>");
                     }
-                });
+                }
+                outdated_series_selector.change();
+            });
+            outdated_series_selector.change(function () {
                 fill_enwik_table();
             });
             shown_series_selector.change();
-            collapsed_series_selector.change(function () {
-                fill_enwik_table();
-            });
             function fill_enwik_table(sorted_column) {
                 sorted_column = sorted_column || "total_compressed_size";
                 $.each(enwik_sorted_columns_by_field, function (field_name, column_id) {
@@ -155,24 +207,16 @@
                         $("#" + column_id).css("text-decoration", "");
                     }
                 });
-                var series_to_show = new Set();
-                shown_series_selector.find("option").each(function () {
-                    if ($(this).prop("selected")) {
-                        series_to_show.add($(this).val());
-                    }
-                });
-                var series_to_collapse = new Set();
-                collapsed_series_selector.find("option").each(function () {
-                    if ($(this).prop("selected")) {
-                        series_to_collapse.add($(this).val());
-                    }
-                });
+                var series_to_show = find_series_to_show();
+                var series_to_collapse = find_series_to_collapse();
+                var series_with_outdated_results = find_series_with_outdated_results();
                 var enwik_results = [];
                 var seen_series = new Set();
                 for (var single_result of enwik_results_all) {
                     var series = single_result.program_series;
                     if (series_to_show.has(series) &&
-                            !(series_to_collapse.has(series) && seen_series.has(series))) {
+                            !(series_to_collapse.has(series) && seen_series.has(series)) &&
+                            (series_with_outdated_results.has(series) || single_result.outdated === "no")) {
                         enwik_results.push(single_result);
                     }
                     seen_series.add(series);
@@ -190,6 +234,7 @@
                 for (var index = 0; index < enwik_results.length; index++) {
                     var result = enwik_results[index];
                     var row = $("<tr></tr>");
+                    row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_series + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_name + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_options + "</td>");

@@ -41,7 +41,7 @@
                         </select>
                     </div>
                     <div class="col form-group">
-                        <label for="enwik_expanded_series">Show only first result in series</label>
+                        <label for="enwik_collapsed_series">Show only first result in series</label>
                         <select multiple class="form-control" id="enwik_collapsed_series">
                             <!--filled in script-->
                         </select>
@@ -100,7 +100,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js" 
                 integrity="sha256-F8eQhL9KDGgaDitxiSyq6SnTCL0m67rt7niivBtH2rc=" 
         crossorigin="anonymous"></script>
-        <script type="text/javascript">
+        <script>
             "use strict";
             var enwik_results_csv = String.raw`
 "program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id"
@@ -210,3 +210,7 @@
         </script>
     </body>
 </html>
+<!--
+This page won't work in Internet Explorer 11 and some other browsers because it uses e.g. String.raw() feature:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw
+-->

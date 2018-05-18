@@ -41,7 +41,7 @@
                         </select>
                     </div>
                     <div class="col form-group">
-                        <label for="enwik_collapsed_series">Show only first non-outdated result in series</label>
+                        <label for="enwik_collapsed_series">Show only best non-outdated result in series</label>
                         <select multiple class="form-control" id="enwik_collapsed_series">
                             <!--filled in script-->
                         </select>
@@ -210,6 +210,14 @@
                 var series_to_show = find_series_to_show();
                 var series_to_collapse = find_series_to_collapse();
                 var series_with_outdated_results = find_series_with_outdated_results();
+                enwik_results_all.sort(function (a, b) {
+                    if (a[sorted_column].length !== b[sorted_column].length) {
+                        return a[sorted_column].length - b[sorted_column].length;
+                    } else {
+                        return a[sorted_column] === b[sorted_column] ? 0 :
+                                a[sorted_column] < b[sorted_column] ? -1 : 1;
+                    }
+                });
                 var enwik_results = [];
                 var seen_series = new Set();
                 for (var single_result of enwik_results_all) {
@@ -218,17 +226,9 @@
                             !(series_to_collapse.has(series) && seen_series.has(series)) &&
                             (series_with_outdated_results.has(series) || single_result.outdated === "no")) {
                         enwik_results.push(single_result);
+                        seen_series.add(series);
                     }
-                    seen_series.add(series);
                 }
-                enwik_results.sort(function (a, b) {
-                    if (a[sorted_column].length !== b[sorted_column].length) {
-                        return a[sorted_column].length - b[sorted_column].length;
-                    } else {
-                        return a[sorted_column] === b[sorted_column] ? 0 :
-                                a[sorted_column] < b[sorted_column] ? -1 : 1;
-                    }
-                });
                 var body = $("#enwik_results_body");
                 body.empty();
                 for (var index = 0; index < enwik_results.length; index++) {

@@ -146,32 +146,14 @@
             var shown_series_selector = $("#enwik_shown_series");
             var collapsed_series_selector = $("#enwik_collapsed_series");
             var outdated_series_selector = $("#enwik_outdated_series");
-            function find_series_to_show() {
-                var series_to_show = new Set();
-                shown_series_selector.find("option").each(function () {
+            function find_selected_options(options_selector) {
+                var found_options = new Set();
+                options_selector.find("option").each(function () {
                     if ($(this).prop("selected")) {
-                        series_to_show.add($(this).val());
+                        found_options.add($(this).val());
                     }
                 });
-                return series_to_show;
-            }
-            function find_series_to_collapse() {
-                var series_to_collapse = new Set();
-                collapsed_series_selector.find("option").each(function () {
-                    if ($(this).prop("selected")) {
-                        series_to_collapse.add($(this).val());
-                    }
-                });
-                return series_to_collapse;
-            }
-            function find_series_with_outdated_results() {
-                var series_with_outdated_results = new Set();
-                outdated_series_selector.find("option").each(function () {
-                    if ($(this).prop("selected")) {
-                        series_with_outdated_results.add($(this).val());
-                    }
-                });
-                return series_with_outdated_results;
+                return found_options;
             }
             for (var program_series of enwik_program_series) {
                 shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
@@ -179,15 +161,15 @@
             shown_series_selector.change(function () {
                 collapsed_series_selector.empty();
                 collapsed_series_selector.append("<option></option>");
-                for (var series of find_series_to_show()) {
+                for (var series of find_selected_options(shown_series_selector)) {
                     collapsed_series_selector.append("<option selected=\"selected\">" + series + "</option>");
                 }
                 collapsed_series_selector.change();
             });
             collapsed_series_selector.change(function () {
                 outdated_series_selector.empty();
-                var series_to_collapse = find_series_to_collapse();
-                for (var series of find_series_to_show()) {
+                var series_to_collapse = find_selected_options(collapsed_series_selector);
+                for (var series of find_selected_options(shown_series_selector)) {
                     if (!series_to_collapse.has(series)) {
                         outdated_series_selector.append("<option>" + series + "</option>");
                     }
@@ -207,9 +189,9 @@
                         $("#" + column_id).css("text-decoration", "");
                     }
                 });
-                var series_to_show = find_series_to_show();
-                var series_to_collapse = find_series_to_collapse();
-                var series_with_outdated_results = find_series_with_outdated_results();
+                var series_to_show = find_selected_options(shown_series_selector);
+                var series_to_collapse = find_selected_options(collapsed_series_selector);
+                var series_with_outdated_results = find_selected_options(outdated_series_selector);
                 enwik_results_all.sort(function (a, b) {
                     if (a[sorted_column].length !== b[sorted_column].length) {
                         return a[sorted_column].length - b[sorted_column].length;

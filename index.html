@@ -323,13 +323,14 @@
             $("#enwik_results").after(Array.from(names, function ([id, name]) {
                 let headers = $("<tr></tr>");
                 headers.append("<th>#</th>");
-                headers.append("<th>Program series: name / options</th>");
+                headers.append("<th>Program series: name<br>options</th>");
                 for (let file_name of files.get(id)) {
                     headers.append("<th id=\"" + id + "_" + file_name + "_size_column\">" + file_name + "</th>");
                 }
-                headers.append("<th id=\"" + id + "_total_without_decomp_column\">Total size without decomp</th>");
-                headers.append("<th>Decomp size (7z)</th>");
-                headers.append("<th id=\"" + id + "_total_size_column\">Total size</th>");
+                headers.append("<th class=\"text-center\" id=\"" + id +
+                        "_total_without_decomp_column\">Total size<br>without decomp</th>");
+                headers.append("<th class=\"text-center\">Decomp size<br>(7z)</th>");
+                headers.append("<th class=\"text-center\" id=\"" + id + "_total_size_column\">Total size</th>");
                 let section = String.raw`
                 <div id="${id}_results" class="mt-5 mb-5">
                     <h3>Results for ${name}</h3>

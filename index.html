@@ -11,9 +11,18 @@
     </head>
     <body>
         <div class="container" style="max-width: 90%;">
-            <h1>enwik8 &amp; enwik9</h1>
+            <h1>Lossless data compression benchmark</h1>
             <div>
-                Rules:
+                Contents:
+                <ul id="links">
+                    <li><a href="#results">Rules</a></li>
+                    <li><a href="#enwik_results" id="enwik_results_link">Results for enwik8 &amp; enwik9</a></li>
+                    <!-- other benchmarks links filled in script -->
+                    <li><a href="#notes">Notes</a></li>
+                </ul>
+            </div>
+            <div id="results">
+                <h3>Rules:</h3>
                 <ul>
                     <li>
                         Results must be publicly verifiable. Compression programs must be free for personal use without
@@ -32,68 +41,73 @@
                     </li>
                 </ul>
             </div>
-            <form>
-                <div class="row">
-                    <div class="col form-group">
-                        <label for="enwik_shown_series">Show compressor series</label>
-                        <select multiple class="form-control" id="enwik_shown_series">
-                            <!--filled in script-->
-                        </select>
+            <div id="enwik_results" class="mt-5 mb-5">
+                <h3>Results for enwik8 &amp; enwik9</h3>
+                <form>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label for="enwik_shown_series">Show compressor series</label>
+                            <select multiple class="form-control" id="enwik_shown_series">
+                                <!-- filled in script -->
+                            </select>
+                        </div>
+                        <div class="col form-group">
+                            <label for="enwik_collapsed_series">Show only best non-outdated result in series</label>
+                            <select multiple class="form-control" id="enwik_collapsed_series">
+                                <!-- filled in script -->
+                            </select>
+                        </div>
+                        <div class="col form-group">
+                            <label for="enwik_outdated_series">Show outdated results</label>
+                            <select multiple class="form-control" id="enwik_outdated_series">
+                                <!-- filled in script -->
+                            </select>
+                        </div>
                     </div>
-                    <div class="col form-group">
-                        <label for="enwik_collapsed_series">Show only best non-outdated result in series</label>
-                        <select multiple class="form-control" id="enwik_collapsed_series">
-                            <!--filled in script-->
-                        </select>
+                    <div class="row">
+                        <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
+                        </div>
                     </div>
-                    <div class="col form-group">
-                        <label for="enwik_outdated_series">Show outdated results</label>
-                        <select multiple class="form-control" id="enwik_outdated_series">
-                            <!--filled in script-->
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
-                    </div>
-                </div>
-            </form>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="border-bottom-0 pb-0 text-left">#</th>
-                        <th class="border-bottom-0 pb-0 text-left">Program series</th>
-                        <th class="border-bottom-0 pb-0 text-left">Program name</th>
-                        <th class="border-bottom-0 pb-0 text-left">Options</th>
-                        <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
-                        <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
-                        <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
-                        <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
-                        <th class="border-bottom-0 pb-0 text-right">Mem</th>
-                        <th class="border-bottom-0 pb-0 text-left">Alg</th>
-                        <th class="border-bottom-0 pb-0 text-right">Note</th>
-                    </tr>
-                    <tr>
-                        <th class="border-top-0 pt-0" colspan="4"></th>
-                        <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
-                        <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
-                        <th class="border-top-0 pt-0"></th>
-                        <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
-                        <th class="border-top-0 pt-0 text-right">Comp</th>
-                        <th class="border-top-0 pt-0 text-right">Decomp</th>
-                        <th class="border-top-0 pt-0" colspan="3"></th>
-                    </tr>
-                </thead>
-                <tbody id="enwik_results_body"><!--filled in script--></tbody>
-            </table>
-            <h3>Notes</h3>
-            <ol>
-                <li id="note-1">
-                    Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.
-                </li>
-            </ol>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="border-bottom-0 pb-0 text-left">#</th>
+                            <th class="border-bottom-0 pb-0 text-left">Program series</th>
+                            <th class="border-bottom-0 pb-0 text-left">Program name</th>
+                            <th class="border-bottom-0 pb-0 text-left">Options</th>
+                            <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
+                            <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
+                            <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
+                            <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
+                            <th class="border-bottom-0 pb-0 text-right">Mem</th>
+                            <th class="border-bottom-0 pb-0 text-left">Alg</th>
+                            <th class="border-bottom-0 pb-0 text-right">Note</th>
+                        </tr>
+                        <tr>
+                            <th class="border-top-0 pt-0" colspan="4"></th>
+                            <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
+                            <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
+                            <th class="border-top-0 pt-0"></th>
+                            <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
+                            <th class="border-top-0 pt-0 text-right">Comp</th>
+                            <th class="border-top-0 pt-0 text-right">Decomp</th>
+                            <th class="border-top-0 pt-0" colspan="3"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="enwik_results_body"><!-- filled in script --></tbody>
+                </table>
+            </div>
+            <div id="notes">
+                <h3>Notes</h3>
+                <ol>
+                    <li id="note-1">
+                        Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.
+                    </li>
+                </ol>
+            </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -109,6 +123,59 @@
         crossorigin="anonymous"></script>
         <script>
             "use strict";
+            // scripts are split to work around NetBeans parsing problems
+        </script>
+        <script>
+            // input data: enwiks
+            let enwik_results_all = $.csv.toObjects(String.raw`
+"program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id","outdated"
+"CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1","yes"
+"PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1","no"
+"fake","fake v1","--fast","93,123,123","923,123,123","123,123","923,246,246","23,456","23,456","1,234","FAKE","0","no"
+"fake","fake v1","--test","3,123,123","23,123,123","123,123","23,246,246","823,456","823,456","81,234","FAKE","0","yes"
+"fake","fake v1","--best","20,000,000","100,000,000","123,123","100,123,123","123,456","123,456","12,345","FAKE","0","no"
+            `.trim());
+            // input data: other corporas
+            let id_calgary = "calgary";
+            let id_canterbury = "canterbury";
+            let id_max_comp = "max_comp";
+            let id_silesia = "silesia";
+            let names = new Map([
+                [id_calgary, "Calgary corpus"],
+                [id_canterbury, "Canterbury corpus"],
+                [id_max_comp, "Maximum Compression SFC test files"],
+                [id_silesia, "Silesia compression corpus"]
+            ]);
+            let files = new Map([
+                [id_calgary, ["bib", "book1", "book2", "geo", "news", "obj1", "obj2", "paper1", "paper2", "pic",
+                        "progc", "progl", "progp", "trans"]],
+                [id_canterbury, ["alice29.txt", "asyoulik.txt", "cp.html", "fields.c", "grammar.lsp", "kennedy.xls",
+                        "lcet10.txt", "plrabn12.txt", "ptt5", "sum", "xargs.1"]],
+                [id_max_comp, ["world95.txt", "FP.LOG", "english.dic", "AcroRd32.exe", "MSO97.DLL", "rafale.bmp",
+                        "A10.jpg", "vcfiu.hlp", "ohs.doc", "FlashMX.pdf"]],
+                [id_silesia, ["dickens", "mozilla", "mr", "nci", "ooffice", "osdb", "reymont", "samba", "sao",
+                        "webster", "xml", "x-ray"]]
+            ]);
+            let results_by_corpus = new Map();
+            results_by_corpus.set(id_calgary, $.csv.toObjects(String.raw`
+"program_series","program_name","program_options","bib_size","book1_size","book2_size","geo_size","news_size","obj1_size","obj2_size","paper1_size","paper2_size","pic_size","progc_size","progl_size","progp_size","trans_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
+"COPY","verbatim copy","","111,261","768,771","610,856","102,400","377,109","21,504","246,814","53,161","82,199","513,216","39,611","71,646","49,379","93,695","3,141,622","0","3,141,622","no"
+            `.trim()));
+            results_by_corpus.set(id_canterbury, $.csv.toObjects(String.raw`
+"program_series","program_name","program_options","alice29.txt_size","asyoulik.txt_size","cp.html_size","fields.c_size","grammar.lsp_size","kennedy.xls_size","lcet10.txt_size","plrabn12.txt_size","ptt5_size","sum_size","xargs.1_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
+"COPY","verbatim copy","","152,089","125,179","24,603","11,150","3,721","1,029,744","426,754","481,861","513,216","38,240","4,227","2,810,784","0","2,810,784","no"
+            `.trim()));
+            results_by_corpus.set(id_max_comp, $.csv.toObjects(String.raw`
+"program_series","program_name","program_options","world95.txt_size","FP.LOG_size","english.dic_size","AcroRd32.exe_size","MSO97.DLL_size","rafale.bmp_size","A10.jpg_size","vcfiu.hlp_size","ohs.doc_size","FlashMX.pdf_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
+"COPY","verbatim copy","","2,988,578","20,617,071","4,067,439","3,870,784","3,782,416","4,149,414","842,468","4,121,418","4,168,192","4,526,946","53,134,726","0","53,134,726","no"
+            `.trim()));
+            results_by_corpus.set(id_silesia, $.csv.toObjects(String.raw`
+"program_series","program_name","program_options","dickens_size","mozilla_size","mr_size","nci_size","ooffice_size","osdb_size","reymont_size","samba_size","sao_size","webster_size","xml_size","x-ray_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
+"COPY","verbatim copy","","10,192,446","51,220,480","9,970,564","33,553,445","6,152,192","10,085,684","6,627,202","21,606,400","7,251,944","41,458,703","5,345,280","8,474,240","211,938,580","0","211,938,580","no"
+            `.trim()));
+        </script>
+        <script>
+            // generic helper functions
             function assert(condition, message) {
                 if (!condition) {
                     message = message || "Assertion failed";
@@ -118,36 +185,19 @@
                     throw message; // Fallback
                 }
             }
-            var enwik_results_csv = String.raw`
-"program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id","outdated"
-"CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1","yes"
-"PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1","no"
-"fake","fake v1","--fast","93,123,123","923,123,123","123,123","923,246,246","23,456","23,456","1,234","FAKE","0","no"
-"fake","fake v1","--test","3,123,123","23,123,123","123,123","23,246,246","823,456","823,456","81,234","FAKE","0","yes"
-"fake","fake v1","--best","20,000,000","100,000,000","123,123","100,123,123","123,456","123,456","12,345","FAKE","0","no"
-`.trim();
-            var enwik_results_all = $.csv.toObjects(enwik_results_csv);
-            var enwik_program_series = new Set();
-            $.each(enwik_results_all, function (index, result) {
-                assert(result.outdated === "yes" || result.outdated === "no");
-                enwik_program_series.add(result.program_series);
-            });
-            $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
-            var enwik_sorted_columns_by_field = {
-                compressed_enwik8_size: "enwik8_size_column",
-                compressed_enwik9_size: "enwik9_size_column",
-                total_compressed_size: "enwik_total_size_column"
-            };
-            $.each(enwik_sorted_columns_by_field, function (field_name, column_name) {
-                $("#" + column_name).click(function () {
-                    fill_enwik_table(field_name);
-                });
-            });
-            var shown_series_selector = $("#enwik_shown_series");
-            var collapsed_series_selector = $("#enwik_collapsed_series");
-            var outdated_series_selector = $("#enwik_outdated_series");
+            function escape_selector(s) {
+                return s.replace(/(:|\.|\[|\])/g, "\\$1");
+            }
+            // common display functions
+            function attach_sorted_column_handlers(sorted_columns_ids_by_field_name, fill_table_function) {
+                for (let [field_name, column_id] of sorted_columns_ids_by_field_name) {
+                    $(escape_selector("#" + column_id)).click(function () {
+                        fill_table_function(field_name);
+                    });
+                }
+            }
             function find_selected_options(options_selector) {
-                var found_options = new Set();
+                let found_options = new Set();
                 options_selector.find("option").each(function () {
                     if ($(this).prop("selected")) {
                         found_options.add($(this).val());
@@ -155,67 +205,99 @@
                 });
                 return found_options;
             }
-            for (var program_series of enwik_program_series) {
-                shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
+            function setup_selectors(corpus_program_series,
+                    shown_series_selector, collapsed_series_selector,
+                    outdated_series_selector, update_action) {
+                for (let program_series of corpus_program_series) {
+                    shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
+                }
+                shown_series_selector.change(function () {
+                    collapsed_series_selector.empty();
+                    collapsed_series_selector.append("<option></option>");
+                    for (let series of find_selected_options(shown_series_selector)) {
+                        collapsed_series_selector.append("<option selected=\"selected\">" + series + "</option>");
+                    }
+                    collapsed_series_selector.change();
+                });
+                collapsed_series_selector.change(function () {
+                    outdated_series_selector.empty();
+                    let series_to_collapse = find_selected_options(collapsed_series_selector);
+                    for (let series of find_selected_options(shown_series_selector)) {
+                        if (!series_to_collapse.has(series)) {
+                            outdated_series_selector.append("<option>" + series + "</option>");
+                        }
+                    }
+                    outdated_series_selector.change();
+                });
+                outdated_series_selector.change(function () {
+                    update_action();
+                });
+                shown_series_selector.change();
             }
-            shown_series_selector.change(function () {
-                collapsed_series_selector.empty();
-                collapsed_series_selector.append("<option></option>");
-                for (var series of find_selected_options(shown_series_selector)) {
-                    collapsed_series_selector.append("<option selected=\"selected\">" + series + "</option>");
-                }
-                collapsed_series_selector.change();
-            });
-            collapsed_series_selector.change(function () {
-                outdated_series_selector.empty();
-                var series_to_collapse = find_selected_options(collapsed_series_selector);
-                for (var series of find_selected_options(shown_series_selector)) {
-                    if (!series_to_collapse.has(series)) {
-                        outdated_series_selector.append("<option>" + series + "</option>");
+            function emphasize_sorted_column(chosen_field_name, field_names_to_column_id) {
+                for (let [field_name, column_id] of field_names_to_column_id) {
+                    if (field_name === chosen_field_name) {
+                        $(escape_selector("#" + column_id)).css("text-decoration", "underline");
+                    } else {
+                        $(escape_selector("#" + column_id)).css("text-decoration", "");
                     }
                 }
-                outdated_series_selector.change();
-            });
-            outdated_series_selector.change(function () {
-                fill_enwik_table();
-            });
-            shown_series_selector.change();
-            function fill_enwik_table(sorted_column) {
-                sorted_column = sorted_column || "total_compressed_size";
-                $.each(enwik_sorted_columns_by_field, function (field_name, column_id) {
-                    if (field_name === sorted_column) {
-                        $("#" + column_id).css("text-decoration", "underline");
+            }
+            function sort_by_field_length_and_value(objects_array, field_name) {
+                objects_array.sort(function (a, b) {
+                    if (a[field_name].length !== b[field_name].length) {
+                        return a[field_name].length - b[field_name].length;
                     } else {
-                        $("#" + column_id).css("text-decoration", "");
+                        return a[field_name] === b[field_name] ? 0 : a[field_name] < b[field_name] ? -1 : 1;
                     }
                 });
-                var series_to_show = find_selected_options(shown_series_selector);
-                var series_to_collapse = find_selected_options(collapsed_series_selector);
-                var series_with_outdated_results = find_selected_options(outdated_series_selector);
-                enwik_results_all.sort(function (a, b) {
-                    if (a[sorted_column].length !== b[sorted_column].length) {
-                        return a[sorted_column].length - b[sorted_column].length;
-                    } else {
-                        return a[sorted_column] === b[sorted_column] ? 0 :
-                                a[sorted_column] < b[sorted_column] ? -1 : 1;
-                    }
-                });
-                var enwik_results = [];
-                var seen_series = new Set();
-                for (var single_result of enwik_results_all) {
-                    var series = single_result.program_series;
+            }
+            function filtered_corpus_results(corpus_results_all, shown_series_selector, collapsed_series_selector,
+                    outdated_series_selector) {
+                let series_to_show = find_selected_options(shown_series_selector);
+                let series_to_collapse = find_selected_options(collapsed_series_selector);
+                let series_with_outdated_results = find_selected_options(outdated_series_selector);
+                let corpus_results = [];
+                let seen_series = new Set();
+                for (let single_result of corpus_results_all) {
+                    let series = single_result.program_series;
                     if (series_to_show.has(series) &&
                             !(series_to_collapse.has(series) && seen_series.has(series)) &&
                             (series_with_outdated_results.has(series) || single_result.outdated === "no")) {
-                        enwik_results.push(single_result);
+                        corpus_results.push(single_result);
                         seen_series.add(series);
                     }
                 }
-                var body = $("#enwik_results_body");
+                return corpus_results;
+            }
+            // displaying enwiks results
+            let enwik_program_series = new Set();
+            for (let result of enwik_results_all) {
+                assert(result.outdated === "yes" || result.outdated === "no");
+                enwik_program_series.add(result.program_series);
+            }
+            $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
+            let enwik_sorted_columns_ids_by_field_name = new Map([
+                ["compressed_enwik8_size", "enwik8_size_column"],
+                ["compressed_enwik9_size", "enwik9_size_column"],
+                ["total_compressed_size", "enwik_total_size_column"]
+            ]);
+            attach_sorted_column_handlers(enwik_sorted_columns_ids_by_field_name, fill_enwik_table);
+            let shown_series_selector = $("#enwik_shown_series");
+            let collapsed_series_selector = $("#enwik_collapsed_series");
+            let outdated_series_selector = $("#enwik_outdated_series");
+            setup_selectors(enwik_program_series, shown_series_selector, collapsed_series_selector,
+                    outdated_series_selector, fill_enwik_table);
+            function fill_enwik_table(sorted_field) {
+                sorted_field = sorted_field || "total_compressed_size";
+                emphasize_sorted_column(sorted_field, enwik_sorted_columns_ids_by_field_name);
+                sort_by_field_length_and_value(enwik_results_all, sorted_field);
+                let enwik_results = filtered_corpus_results(enwik_results_all, shown_series_selector,
+                        collapsed_series_selector, outdated_series_selector);
+                let body = $("#enwik_results_body");
                 body.empty();
-                for (var index = 0; index < enwik_results.length; index++) {
-                    var result = enwik_results[index];
-                    var row = $("<tr></tr>");
+                $.each(enwik_results, function (index, result) {
+                    let row = $("<tr></tr>");
                     row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_series + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_name + "</td>");
@@ -231,9 +313,106 @@
                     row.append("<td class=\"text-right\"><a href=\"#note-" + result.note_id + "\">" + result.note_id +
                             "</a></td>");
                     body.append(row);
-                }
+                });
             }
             fill_enwik_table();
+            // displaying other corporas results
+            $("#enwik_results_link").after(Array.from(names, function ([id, name]) {
+                return "<li><a href=\"#" + id + "_results\">Results for " + name + "</a></li>";
+            }));
+            $("#enwik_results").after(Array.from(names, function ([id, name]) {
+                let headers = $("<tr></tr>");
+                headers.append("<th>#</th>");
+                headers.append("<th>Program series: name / options</th>");
+                for (let file_name of files.get(id)) {
+                    headers.append("<th id=\"" + id + "_" + file_name + "_size_column\">" + file_name + "</th>");
+                }
+                headers.append("<th id=\"" + id + "_total_without_decomp_column\">Total size without decomp</th>");
+                headers.append("<th>Decomp size (7z)</th>");
+                headers.append("<th id=\"" + id + "_total_size_column\">Total size</th>");
+                let section = String.raw`
+                <div id="${id}_results" class="mt-5 mb-5">
+                    <h3>Results for ${name}</h3>
+                    <form>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label for="${id}_shown_series">Show compressor series</label>
+                                <select multiple class="form-control" id="${id}_shown_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="${id}_collapsed_series">Show only best non-outdated result in series</label>
+                                <select multiple class="form-control" id="${id}_collapsed_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="${id}_outdated_series">Show outdated results</label>
+                                <select multiple class="form-control" id="${id}_outdated_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="${id}_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="${id}_results_dump">
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped small">
+                        <thead>${headers.html()}</thead>
+                        <tbody id="${id}_results_body"><!-- filled in script --></tbody>
+                    </table>
+                </div>`;
+                return section;
+            }));
+            for (let [id, file_names] of files) {
+                let corpus_results_all = results_by_corpus.get(id);
+                let corpus_program_series = new Set();
+                for (let result of corpus_results_all) {
+                    assert(result.outdated === "yes" || result.outdated === "no");
+                    corpus_program_series.add(result.program_series);
+                }
+                $("#" + id + "_results_dump").val(JSON.stringify(corpus_results_all));
+                let corpus_sorted_columns_by_field = new Map();
+                for (let file_name of file_names) {
+                    corpus_sorted_columns_by_field.set(file_name + "_size", id + "_" + file_name + "_size_column");
+                }
+                corpus_sorted_columns_by_field.set("total_without_decompressor", id + "_total_without_decomp_column");
+                corpus_sorted_columns_by_field.set("total_compressed_size", id + "_total_size_column");
+                attach_sorted_column_handlers(corpus_sorted_columns_by_field, fill_corpus_table);
+                let shown_series_selector = $("#" + id + "_shown_series");
+                let collapsed_series_selector = $("#" + id + "_collapsed_series");
+                let outdated_series_selector = $("#" + id + "_outdated_series");
+                setup_selectors(corpus_program_series, shown_series_selector, collapsed_series_selector,
+                        outdated_series_selector, fill_corpus_table);
+                function fill_corpus_table(sorted_field) {
+                    sorted_field = sorted_field || "total_compressed_size";
+                    emphasize_sorted_column(sorted_field, corpus_sorted_columns_by_field);
+                    sort_by_field_length_and_value(corpus_results_all, sorted_field);
+                    let corpus_results = filtered_corpus_results(corpus_results_all, shown_series_selector,
+                            collapsed_series_selector, outdated_series_selector);
+                    let body = $("#" + id + "_results_body");
+                    body.empty();
+                    $.each(corpus_results, function (index, result) {
+                        let row = $("<tr></tr>");
+                        row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
+                        let program_description = result.program_options.trim() ?
+                                (result.program_series + ": " + result.program_name + "<br>" + result.program_options) :
+                                (result.program_series + ": " + result.program_name);
+                        row.append("<td class=\"text-left\">" + program_description + "</td>");
+                        for (let file_name of file_names) {
+                            row.append("<td class=\"text-right\">" + result[file_name + "_size"] + "</td>");
+                        }
+                        row.append("<td class=\"text-right\">" + result.total_without_decompressor + "</td>");
+                        row.append("<td class=\"text-right\">" + result.decompressor_size + "</td>");
+                        row.append("<td class=\"text-right\">" + result.total_compressed_size + "</td>");
+                        body.append(row);
+                    });
+                }
+            }
         </script>
     </body>
 </html>

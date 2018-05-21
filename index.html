@@ -3,9 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
         <link rel="stylesheet"
-              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-              integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+              href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+              integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
               crossorigin="anonymous">
         <title>lossless-benchmark</title>
     </head>
@@ -15,13 +16,80 @@
             <div>
                 Contents:
                 <ul id="links">
-                    <li><a href="#results">Rules</a></li>
-                    <li><a href="#enwik_results" id="enwik_results_link">Results for enwik8 &amp; enwik9</a></li>
-                    <!-- other benchmarks links filled in script -->
+                    <li><a href="#results">Results</a></li>
+                    <li><a href="#rules">Rules</a></li>
                     <li><a href="#notes">Notes</a></li>
                 </ul>
             </div>
-            <div id="results">
+            <nav id="results">
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-enwik-results-tab" href="#nav-enwik-results" role="tab"
+                       data-toggle="tab" aria-controls="nav-enwik-results" aria-selected="true">enwik8 &amp; enwik9</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tab-content">
+                <div class="tab-pane show active" id="nav-enwik-results"
+                     role="tabpanel" aria-labelledby="nav-enwik-results-tab">
+                    <h3>Results for enwik8 &amp; enwik9</h3>
+                    <form>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label for="enwik_shown_series">Show compressor series</label>
+                                <select multiple class="form-control" id="enwik_shown_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="enwik_collapsed_series">Show only best non-outdated result in series</label>
+                                <select multiple class="form-control" id="enwik_collapsed_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="enwik_outdated_series">Show outdated results</label>
+                                <select multiple class="form-control" id="enwik_outdated_series">
+                                    <!-- filled in script -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0 pb-0 text-left">#</th>
+                                <th class="border-bottom-0 pb-0 text-left">Program series</th>
+                                <th class="border-bottom-0 pb-0 text-left">Program name</th>
+                                <th class="border-bottom-0 pb-0 text-left">Options</th>
+                                <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
+                                <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
+                                <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
+                                <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
+                                <th class="border-bottom-0 pb-0 text-right">Mem</th>
+                                <th class="border-bottom-0 pb-0 text-left">Alg</th>
+                                <th class="border-bottom-0 pb-0 text-right">Note</th>
+                            </tr>
+                            <tr>
+                                <th class="border-top-0 pt-0" colspan="4"></th>
+                                <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
+                                <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
+                                <th class="border-top-0 pt-0"></th>
+                                <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
+                                <th class="border-top-0 pt-0 text-right">Comp</th>
+                                <th class="border-top-0 pt-0 text-right">Decomp</th>
+                                <th class="border-top-0 pt-0" colspan="3"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="enwik_results_body"><!-- filled in script --></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="rules">
                 <h3>Rules:</h3>
                 <ul>
                     <li>
@@ -41,65 +109,6 @@
                     </li>
                 </ul>
             </div>
-            <div id="enwik_results" class="mt-5 mb-5">
-                <h3>Results for enwik8 &amp; enwik9</h3>
-                <form>
-                    <div class="row">
-                        <div class="col form-group">
-                            <label for="enwik_shown_series">Show compressor series</label>
-                            <select multiple class="form-control" id="enwik_shown_series">
-                                <!-- filled in script -->
-                            </select>
-                        </div>
-                        <div class="col form-group">
-                            <label for="enwik_collapsed_series">Show only best non-outdated result in series</label>
-                            <select multiple class="form-control" id="enwik_collapsed_series">
-                                <!-- filled in script -->
-                            </select>
-                        </div>
-                        <div class="col form-group">
-                            <label for="enwik_outdated_series">Show outdated results</label>
-                            <select multiple class="form-control" id="enwik_outdated_series">
-                                <!-- filled in script -->
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
-                        <div class="col-sm-10">
-                            <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
-                        </div>
-                    </div>
-                </form>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="border-bottom-0 pb-0 text-left">#</th>
-                            <th class="border-bottom-0 pb-0 text-left">Program series</th>
-                            <th class="border-bottom-0 pb-0 text-left">Program name</th>
-                            <th class="border-bottom-0 pb-0 text-left">Options</th>
-                            <th class="border-bottom-0 pb-0 text-center" colspan="2">Compressed size</th>
-                            <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z)</th>
-                            <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
-                            <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
-                            <th class="border-bottom-0 pb-0 text-right">Mem</th>
-                            <th class="border-bottom-0 pb-0 text-left">Alg</th>
-                            <th class="border-bottom-0 pb-0 text-right">Note</th>
-                        </tr>
-                        <tr>
-                            <th class="border-top-0 pt-0" colspan="4"></th>
-                            <th class="border-top-0 pt-0 text-right" id="enwik8_size_column">enwik8</th>
-                            <th class="border-top-0 pt-0 text-right" id="enwik9_size_column">enwik9</th>
-                            <th class="border-top-0 pt-0"></th>
-                            <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
-                            <th class="border-top-0 pt-0 text-right">Comp</th>
-                            <th class="border-top-0 pt-0 text-right">Decomp</th>
-                            <th class="border-top-0 pt-0" colspan="3"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="enwik_results_body"><!-- filled in script --></tbody>
-                </table>
-            </div>
             <div id="notes">
                 <h3>Notes</h3>
                 <ol>
@@ -111,12 +120,6 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-                integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js" 
                 integrity="sha256-F8eQhL9KDGgaDitxiSyq6SnTCL0m67rt7niivBtH2rc=" 
@@ -317,10 +320,12 @@
             }
             fill_enwik_table();
             // displaying other corporas results
-            $("#enwik_results_link").after(Array.from(names, function ([id, name]) {
-                return "<li><a href=\"#" + id + "_results\">Results for " + name + "</a></li>";
+            $("#nav-enwik-results-tab").after(Array.from(names, function ([id, name]) {
+                return "<a class=\"nav-item nav-link\" id=\"nav-" + id + "-results-tab\" href=\"#nav-" + id +
+                        "-results\" role=\"tab\" data-toggle=\"tab\" aria-controls=\"nav-" + id +
+                        "-results\" aria-selected=\"false\">" + name + "</a>";
             }));
-            $("#enwik_results").after(Array.from(names, function ([id, name]) {
+            $("#nav-enwik-results").after(Array.from(names, function ([id, name]) {
                 let headers = $("<tr></tr>");
                 headers.append("<th>#</th>");
                 headers.append("<th>Program series: name<br>options</th>");
@@ -332,7 +337,7 @@
                 headers.append("<th class=\"text-center\">Decomp size<br>(7z)</th>");
                 headers.append("<th class=\"text-center\" id=\"" + id + "_total_size_column\">Total size</th>");
                 let section = String.raw`
-                <div id="${id}_results" class="mt-5 mb-5">
+                <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
                     <h3>Results for ${name}</h3>
                     <form>
                         <div class="row">
@@ -415,6 +420,13 @@
                 }
             }
         </script>
+        <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" 
+                integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" 
+                crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
+                integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+                crossorigin="anonymous"></script>
+        <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
     </body>
 </html>
 <!--

@@ -18,9 +18,10 @@
                 <ul id="links">
                     <li><a href="#results">Results</a></li>
                     <li><a href="#rules">Rules</a></li>
-                    <li><a href="#notes">Notes</a></li>
+                    <li><a href="#faq">Questions &amp; answers</a></li>
                 </ul>
             </div>
+            <br/>
             <nav id="results">
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-enwik-results-tab" href="#nav-enwik-results" role="tab"
@@ -87,8 +88,17 @@
                         </thead>
                         <tbody id="enwik_results_body"><!-- filled in script --></tbody>
                     </table>
+                    <div id="notes">
+                        <h3>Notes</h3>
+                        <ol>
+                            <li id="note-1">
+                                Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
+            <br/>
             <div id="rules">
                 <h3>Rules:</h3>
                 <ul>
@@ -98,22 +108,35 @@
                         be prohibited in program license.
                     </li>
                     <li>
-                        By default programs are ranked by compressed enwik9 size + decompressor size. Decompressor size
-                        may be based on publicly available source code (if it exists) or executable size. Decompressor
-                        itself may be compressed to .7z format using LZMA compression.
+                        By default programs are ranked by compressed (enwik9 or all files) size + decompressor size.
+                        Decompressor size may be based on publicly available source code (if it exists) or executable
+                        size. Decompressor itself may be compressed to .7z format using LZMA compression. Source form is
+                        denoted by placing <code>(s)</code> after decompressor size, executable form is denoted by
+                        placing <code>(x)</code>.
                     </li>
                     <li>
                         Decompressor must be self-contained. It must not rely on any data that is not contained in
-                        decompressor package. Any libraries that are not available in stock OS install must also be
-                        placed in decompressor package.
+                        decompressor package. Any libraries that are not standard libraries or are not available in
+                        stock OS install must also be placed in decompressor package (in source or executable form).
                     </li>
                 </ul>
             </div>
-            <div id="notes">
-                <h3>Notes</h3>
+            <br/>
+            <div id="faq">
+                <h3>Questions &amp; answers</h3>
                 <ol>
-                    <li id="note-1">
-                        Reported by Darek on May 9, 2018. System: Core i7 4900MQ at 3.8GHz, 32GB, Win7Pro 64.
+                    <li>
+                        <p><b>Q: How to measure speed and memory usage on Microsoft Windows?</b></p>
+                        <p>A: Look for latest version of ProcProfile here: 
+                            <a href="https://encode.ru/threads/1838-Command-Line-Process-Profiling-Tool">encode.ru:
+                                Command Line Process Profiling Tool</a></p>
+                    </li>
+                    <li>
+                        <p><b>Q: How to measure speed and memory usage on GNU/ Linux?</b></p>
+                        <p>A: Invoke <code>/usr/bin/time -v &lt;original command&gt;</code>. Time to be reported will
+                            be after <code>Elapsed (wall clock) time</code> and memory usage to be reported will be
+                            after <code>Maximum resident set size (kbytes)</code> (needs to be scaled to get usage in
+                            megabytes).</p>
                     </li>
                 </ol>
             </div>

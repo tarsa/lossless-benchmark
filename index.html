@@ -31,7 +31,7 @@
             <div class="tab-content" id="nav-tab-content">
                 <div class="tab-pane show active" id="nav-enwik-results"
                      role="tabpanel" aria-labelledby="nav-enwik-results-tab">
-                    <h3>Results for enwik8 &amp; enwik9</h3>
+                    <h3 class="text-center">Results for enwik8 &amp; enwik9</h3>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -438,7 +438,7 @@
                 headers.append("<th class=\"text-center\" id=\"" + id + "_total_size_column\">Total size</th>");
                 let section = String.raw`
                 <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
-                    <h3>Results for ${name}</h3>
+                    <h3 class="text-center">Results for ${name}</h3>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -522,11 +522,15 @@
         </script>
         <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" 
                 integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" 
-                crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
         <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
                 integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
-                crossorigin="anonymous"></script>
-        <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+        crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function () {
+                $('body').bootstrapMaterialDesign();
+            });
+        </script>
     </body>
 </html>
 <!--

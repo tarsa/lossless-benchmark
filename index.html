@@ -54,8 +54,12 @@
                             </div>
                         </div>
                         <div class="row">
+                            <a id="enwik_download" class="btn btn-outline-success col-sm-1" role="button" 
+                               download="results_enwik.csv">
+                                Export CSV
+                            </a>
                             <label for="enwik_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <input type="text" readonly class="form-control-plaintext" id="enwik_results_dump">
                             </div>
                         </div>
@@ -156,12 +160,13 @@
         </script>
         <script>
             // input data: enwiks
-            let enwik_results_all = $.csv.toObjects(String.raw`
+            let enwik_results_csv = String.raw`
 "program_series","program_name","program_options","compressed_enwik8_size","compressed_enwik9_size","decompressor_size","total_compressed_size","compression_time","decompression_time","memory_usage_in_mb","algorithm_type","note_id","outdated"
 "CMV","CMV v00.01.01","-m2,3,0x03ed7dfb","18,122,372","149,357,765","78,922","149,436,687","426,163","394,855","3,335","CM","1","no"
 "PAQ","Paq8pxd_v47_3","-s15","16,038,418","126,749,584","150,210","126,899,794","83,435","86,671","27,600","CM","1","no"
 "cmix","cmix v15","","15,111,677","117,959,016","174,134 (s)","118,133,150","650,056","651,717","27,701","CM","2","no"
-            `.trim());
+            `.trim();
+            let enwik_results_all = $.csv.toObjects(enwik_results_csv);
             // input data: other corporas
             let id_calgary = "calgary";
             let id_canterbury = "canterbury";
@@ -183,8 +188,8 @@
                 [id_silesia, ["dickens", "mozilla", "mr", "nci", "ooffice", "osdb", "reymont", "samba", "sao",
                         "webster", "xml", "x-ray"]]
             ]);
-            let results_by_corpus = new Map();
-            results_by_corpus.set(id_calgary, $.csv.toObjects(String.raw`
+            let csv_results_by_corpus = new Map();
+            csv_results_by_corpus.set(id_calgary, String.raw`
 "program_series","program_name","program_options","bib_size","book1_size","book2_size","geo_size","news_size","obj1_size","obj2_size","paper1_size","paper2_size","pic_size","progc_size","progl_size","progp_size","trans_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
 "COPY","verbatim copy","","111,261","768,771","610,856","102,400","377,109","21,504","246,814","53,161","82,199","513,216","39,611","71,646","49,379","93,695","3,141,622","0","3,141,622","no"
 "Info-ZIP","ZIP 3.0","-1","44,005","365,141","248,982","69,944","164,334","10,842","94,041","21,749","35,215","65,674","15,591","20,174","13,518","24,102","1,193,312","67,429 (x)","1,260,741","no"
@@ -206,8 +211,8 @@
 "bzip","bzip2 1.0.6","-8","27,467","232,598","157,443","56,921","118,600","10,787","76,441","16,558","25,041","49,759","12,544","15,579","10,710","17,899","828,347","37,418 (x)","865,765","no"
 "bzip","bzip2 1.0.6","-9","27,467","232,598","157,443","56,921","118,600","10,787","76,441","16,558","25,041","49,759","12,544","15,579","10,710","17,899","828,347","37,418 (x)","865,765","no"
 "cmix","cmix v15","","17,581","176,459","108,340","43,104","78,484","7,131","40,712","11,016","17,432","22,140","8,479","9,059","6,361","10,232","556,530","174,134 (s)","730,664","no"
-            `.trim()));
-            results_by_corpus.set(id_canterbury, $.csv.toObjects(String.raw`
+            `.trim());
+            csv_results_by_corpus.set(id_canterbury, String.raw`
 "program_series","program_name","program_options","alice29.txt_size","asyoulik.txt_size","cp.html_size","fields.c_size","grammar.lsp_size","kennedy.xls_size","lcet10.txt_size","plrabn12.txt_size","ptt5_size","sum_size","xargs.1_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
 "COPY","verbatim copy","","152,089","125,179","24,603","11,150","3,721","1,029,744","426,754","481,861","513,216","38,240","4,227","2,810,784","0","2,810,784","no"
 "Info-ZIP","ZIP 3.0","-1","65,286","56,956","9,192","3,813","1,498","245,179","174,273","228,921","65,676","14,268","2,010","867,072","67,429 (x)","934,501","no"
@@ -229,8 +234,8 @@
 "bzip","bzip2 1.0.6","-8","43,202","39,569","7,624","3,039","1,283","125,048","107,706","145,577","49,759","12,909","1,762","537,478","37,418 (x)","574,896","no"
 "bzip","bzip2 1.0.6","-9","43,202","39,569","7,624","3,039","1,283","130,280","107,706","145,577","49,759","12,909","1,762","542,710","37,418 (x)","580,128","no"
 "cmix","cmix v15","","31,484","29,766","4,861","1,990","795","8,290","74,679","113,460","22,140","7,009","1,153","295,627","174,134 (s)","469,761","no"
-            `.trim()));
-            results_by_corpus.set(id_max_comp, $.csv.toObjects(String.raw`
+            `.trim());
+            csv_results_by_corpus.set(id_max_comp, String.raw`
 "program_series","program_name","program_options","A10.jpg_size","AcroRd32.exe_size","english.dic_size","FlashMX.pdf_size","FP.LOG_size","MSO97.DLL_size","ohs.doc_size","rafale.bmp_size","vcfiu.hlp_size","world95.txt_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
 "COPY","verbatim copy","","842,468","3,870,784","4,067,439","4,526,946","20,617,071","3,782,416","4,168,192","4,149,414","4,121,418","2,988,578","53,134,726","0","53,134,726","no"
 "Info-ZIP","ZIP 3.0","-1","841,167","1,846,133","1,304,391","3,903,436","1,936,140","2,273,121","1,092,278","1,555,327","1,052,918","1,120,670","16,925,581","67,429 (x)","16,993,010","no"
@@ -252,8 +257,8 @@
 "bzip","bzip2 1.0.6","-8","836,969","1,692,270","1,216,624","3,807,098","736,704","2,108,396","909,061","891,353","717,126","591,594","13,507,195","37,418 (x)","13,544,613","no"
 "bzip","bzip2 1.0.6","-9","836,468","1,699,590","1,221,689","3,810,876","723,415","2,110,954","906,814","890,163","712,716","577,006","13,489,691","37,418 (x)","13,527,109","no"
 "cmix","cmix v15","","633,286","820,761","321,010","3,530,665","206,128","1,153,919","457,936","490,241","363,822","300,923","8,278,691","174,134 (s)","8,452,825","no"
-            `.trim()));
-            results_by_corpus.set(id_silesia, $.csv.toObjects(String.raw`
+            `.trim());
+            csv_results_by_corpus.set(id_silesia, String.raw`
 "program_series","program_name","program_options","dickens_size","mozilla_size","mr_size","nci_size","ooffice_size","osdb_size","reymont_size","samba_size","sao_size","webster_size","xml_size","x-ray_size","total_without_decompressor","decompressor_size","total_compressed_size","outdated"
 "COPY","verbatim copy","","10,192,446","51,220,480","9,970,564","33,553,445","6,152,192","10,085,684","6,627,202","21,606,400","7,251,944","41,458,703","5,345,280","8,474,240","211,938,580","0","211,938,580","no"
 "Info-ZIP","ZIP 3.0","-1","4,582,180","20,686,747","3,846,638","4,623,531","3,294,730","4,069,628","2,376,447","6,347,197","5,568,317","14,977,242","967,302","6,028,381","77,368,340","67,429 (x)","77,435,769","no"
@@ -275,7 +280,7 @@
 "bzip","bzip2 1.0.6","-8","2,821,149","17,947,263","2,447,745","1,832,525","2,855,019","2,824,794","1,253,626","4,547,712","4,951,657","8,713,549","439,554","4,058,715","54,693,308","37,418 (x)","54,730,726","no"
 "bzip","bzip2 1.0.6","-9","2,799,520","17,914,392","2,441,280","1,812,734","2,862,526","2,802,792","1,246,230","4,549,759","4,940,524","8,644,714","441,186","4,051,112","54,506,769","37,418 (x)","54,544,187","no"
 "cmix+precomp","cmix v15, precomp v0.4.6","precomp v0.4.6 -cn | cmix v15","1,840,392","7,161,756","1,912,673","811,610","1,256,130","1,969,208","736,373","1,642,789","3,732,491","4,413,876","239,434","3,525,053","29,241,785","429,013 (x)","29,670,798","no"
-            `.trim()));
+            `.trim());
         </script>
         <script>
             // generic helper functions
@@ -374,6 +379,8 @@
                 return corpus_results;
             }
             // displaying enwiks results
+            $("#enwik_download").attr("href",
+                    URL.createObjectURL(new Blob([enwik_results_csv], {type: "application/csv"})));
             let enwik_program_series = new Set();
             for (let result of enwik_results_all) {
                 assert(result.outdated === "yes" || result.outdated === "no");
@@ -461,8 +468,12 @@
                             </div>
                         </div>
                         <div class="row">
+                            <a id="${id}_download" class="btn btn-outline-success col-sm-1" role="button" 
+                               download="results_${id}.csv">
+                                Export CSV
+                            </a>
                             <label for="${id}_results_dump" class="col-sm-2 col-form-label">Raw JSON dump</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <input type="text" readonly class="form-control-plaintext" id="${id}_results_dump">
                             </div>
                         </div>
@@ -475,7 +486,10 @@
                 return section;
             }));
             for (let [id, file_names] of files) {
-                let corpus_results_all = results_by_corpus.get(id);
+                let corpus_results_csv = csv_results_by_corpus.get(id);
+                $("#" + id + "_download").attr("href",
+                        URL.createObjectURL(new Blob([corpus_results_csv], {type: "application/csv"})));
+                let corpus_results_all = $.csv.toObjects(corpus_results_csv);
                 let corpus_program_series = new Set();
                 for (let result of corpus_results_all) {
                     assert(result.outdated === "yes" || result.outdated === "no");

@@ -75,7 +75,7 @@
                                 <th class="border-bottom-0 pb-0 text-right">Decompressor size (7z or Zip)</th>
                                 <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
                                 <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
-                                <th class="border-bottom-0 pb-0 text-right">Mem</th>
+                                <th class="border-bottom-0 pb-0 text-center">Mem</th>
                                 <th class="border-bottom-0 pb-0 text-left">Alg</th>
                                 <th class="border-bottom-0 pb-0 text-right">Note</th>
                             </tr>
@@ -87,7 +87,16 @@
                                 <th class="border-top-0 pt-0 text-right" id="enwik_total_size_column">enwik9 + prog</th>
                                 <th class="border-top-0 pt-0 text-right">Comp</th>
                                 <th class="border-top-0 pt-0 text-right">Decomp</th>
-                                <th class="border-top-0 pt-0" colspan="3"></th>
+                                <th class="border-top-0 pt-0 text-center">
+                                    <select id="memory_scale_selector" style="padding: 0rem 1rem;">
+                                        <option value="1">bytes</option>
+                                        <option value="1000">kB</option>
+                                        <option value="1024">KiB</option>
+                                        <option value="1000000" selected>MB</option>
+                                        <option value="1048576">MiB</option>
+                                    </select>
+                                </th>
+                                <th class="border-top-0 pt-0" colspan="2"></th>
                             </tr>
                         </thead>
                         <tbody id="enwik_results_body"><!-- filled in script --></tbody>
@@ -161,10 +170,10 @@
         <script>
             // input data: enwiks
             let enwik_results_csv = String.raw`
-program_series,program_name,program_options,compressed_enwik8_size,compressed_enwik9_size,decompressor_size,total_compressed_size,compression_time,decompression_time,memory_usage_in_mb,algorithm_type,note_id,outdated
-CMV,CMV v00.01.01,"-m2,3,0x03ed7dfb",18122372,149357765,"78,922 (s)",149436687,426163,394855,3335,CM,1,no
-PAQ,Paq8pxd_v47_3,-s15,16038418,126749584,"150,210 (s)",126899794,83435,86671,27600,CM,1,no
-cmix,cmix v15,,15111677,117959016,"174,134 (s)",118133150,650056,651717,27701,CM,2,no
+program_series,program_name,program_options,compressed_enwik8_size,compressed_enwik9_size,decompressor_size,total_compressed_size,compression_time,decompression_time,memory_usage_in_bytes,algorithm_type,note_id,outdated
+CMV,CMV v00.01.01,"-m2,3,0x03ed7dfb",18122372,149357765,"78,922 (s)",149436687,426163,394855,3497000960,CM,1,no
+PAQ,Paq8pxd_v47_3,-s15,16038418,126749584,"150,210 (s)",126899794,83435,86671,28940697600,CM,1,no
+cmix,cmix v15,,15111677,117959016,"174,134 (s)",118133150,650056,651717,29046603776,CM,2,no
             `.trim();
             let enwik_results_all = $.csv.toObjects(enwik_results_csv);
             // input data: other corporas
@@ -399,6 +408,10 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
             let shown_series_selector = $("#enwik_shown_series");
             let collapsed_series_selector = $("#enwik_collapsed_series");
             let outdated_series_selector = $("#enwik_outdated_series");
+            let memory_scale_selector = $("#memory_scale_selector");
+            memory_scale_selector.change(function () {
+                fill_enwik_table();
+            });
             setup_selectors(enwik_program_series, shown_series_selector, collapsed_series_selector,
                     outdated_series_selector, fill_enwik_table);
             function fill_enwik_table(sorted_field) {
@@ -409,8 +422,10 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
                         collapsed_series_selector, outdated_series_selector);
                 let body = $("#enwik_results_body");
                 body.empty();
+                let memory_scale = find_selected_options(memory_scale_selector).values().next().value;
                 $.each(enwik_results, function (index, result) {
                     let row = $("<tr></tr>");
+                    let scaled_memory_usage = Math.round(result.memory_usage_in_bytes / memory_scale);
                     row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_series + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_name + "</td>");
@@ -421,7 +436,7 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
                     row.append("<td class=\"text-right\">" + separated(result.total_compressed_size) + "</td>");
                     row.append("<td class=\"text-right\">" + separated(result.compression_time) + "</td>");
                     row.append("<td class=\"text-right\">" + separated(result.decompression_time) + "</td>");
-                    row.append("<td class=\"text-right\">" + separated(result.memory_usage_in_mb) + "</td>");
+                    row.append("<td class=\"text-right\">" + separated(scaled_memory_usage) + "</td>");
                     row.append("<td class=\"text-left\">" + result.algorithm_type + "</td>");
                     row.append("<td class=\"text-right\"><a href=\"#note-" + result.note_id + "\">" + result.note_id +
                             "</a></td>");

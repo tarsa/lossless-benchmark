@@ -314,6 +314,7 @@
             // input data: enwiks
             let enwik_results_csv = String.raw`
 program_series,program_name,program_options,compressed_enwik8_size,compressed_enwik9_size,decompressor_size,total_compressed_size,compression_time,decompression_time,memory_usage_in_bytes,algorithm_type,note_id,outdated
+COPY,original files,,100000000,1000000000,0,1000000000,0,0,0,COPY,,no
 CMV,CMV v00.01.01,"-m2,3,0x03ed7dfb",18122372,149357765,"78,922 (s)",149436687,426163,394855,3497000960,CM,1,no
 PAQ,Paq8pxd_v47_3,-s15,16038418,126749584,"150,210 (s)",126899794,83435,86671,28940697600,CM,1,no
 cmix,cmix v15,,15111677,117959016,"174,134 (s)",118133150,650056,651717,29046603776,CM,2,no
@@ -452,6 +453,17 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 return Number(number_like).toLocaleString();
             }
             // common display functions
+            function sorted_series(input_series) {
+                let series = Array.from(input_series);
+                series.sort(function (a, b) {
+                    a = a.toLowerCase();
+                    b = b.toLowerCase();
+                    if (a === "copy") return -1;
+                    if (b === "copy") return 1;
+                    return a === b ? 0 : a > b ? 1 : -1;
+                });
+                return new Set(series);
+            }
             function attach_sorted_column_handlers(sorted_columns_ids_by_field_name, fill_table_function) {
                 for (let [field_name, column_id] of sorted_columns_ids_by_field_name) {
                     $(escape_selector("#" + column_id)).click(function () {
@@ -476,7 +488,6 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 }
                 shown_series_selector.change(function () {
                     collapsed_series_selector.empty();
-                    collapsed_series_selector.append("<option></option>");
                     for (let series of find_selected_options(shown_series_selector)) {
                         collapsed_series_selector.append("<option selected=\"selected\">" + series + "</option>");
                     }
@@ -541,6 +552,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 assert(result.outdated === "yes" || result.outdated === "no");
                 enwik_program_series.add(result.program_series);
             }
+            enwik_program_series = sorted_series(enwik_program_series);
             $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
             let enwik_sorted_columns_ids_by_field_name = new Map([
                 ["compressed_enwik8_size", "enwik8_size_column"],
@@ -658,6 +670,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                     assert(result.outdated === "yes" || result.outdated === "no");
                     corpus_program_series.add(result.program_series);
                 }
+                corpus_program_series = sorted_series(corpus_program_series);
                 $("#" + id + "_results_dump").val(JSON.stringify(corpus_results_all));
                 let corpus_sorted_columns_by_field = new Map();
                 for (let file_name of file_names) {

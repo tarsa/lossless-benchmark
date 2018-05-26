@@ -9,6 +9,11 @@
               integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
               crossorigin="anonymous">
         <title>lossless-benchmark</title>
+        <style>
+            div#programs_series > ul > li > h5 {
+                font-weight: 700;
+            }
+        </style>
     </head>
     <body>
         <div class="container" style="max-width: 90%;">
@@ -19,6 +24,7 @@
                     <li><a href="#results">Results</a></li>
                     <li><a href="#algorithms">Algorithms</a></li>
                     <li><a href="#testsets">Test sets</a></li>
+                    <li><a href="#programs_series">Compression programs</a></li>
                     <li><a href="#rules">Rules</a></li>
                     <li><a href="#faq">Questions &amp; answers</a></li>
                 </ul>
@@ -175,6 +181,59 @@
                         <a href="http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia">Silesia compression corpus</a>
                         was developed by Sebastian Deorowicz et al. It is a much newer corpus than Calgary corpus or
                         Canterbury corpus and aims to reflect data types in common use when creating the corpus.
+                    </li>
+                </ul>
+            </div>
+            <br/>
+            <div id="programs_series">
+                <h3>Compression programs</h3>
+                <ul>
+                    <li id="bzip_series">
+                        <h5>bzip</h5>
+                        <p>
+                            <a href="http://www.bzip.org/">bzip2</a> is a single file compressor with BSD-like license
+                            by Julian Seward. It popularized Burrows-Wheeler Transform as a means for compression. Its
+                            predecessor, bzip, was encumbered by patents due to use of arithmetic coding. bzip2 uses
+                            Huffman coding instead.
+                        </p>
+                    </li>
+                    <li id="cmix_series">
+                        <h5>cmix</h5>
+                        <p>
+                            <a href="http://www.byronknoll.com/cmix.html">cmix</a> is GPL-licensed file compressor by
+                            Byron Knoll. Is is based on PAQ series of compression programs, but greatly increases amount
+                            of processing per input bit. Recent versions include
+                            <a href="https://en.wikipedia.org/wiki/Long_short-term_memory">LSTM neural networks</a>
+                            based models.
+                        </p>
+                    </li>
+                    <li id="CMV_series">
+                        <h5>CMV</h5>
+                        <p>
+                            <a href="http://encode.ru/threads/2284-CMV">CMV</a> is free, closed source file compressor
+                            by Mauro Vezzosi.
+                        </p>
+                    </li>
+                    <li id="COPY_series">
+                        <h5>COPY</h5>
+                        <p>
+                            This is actually a no operation. Exists to show uncompressed file sizes.
+                        </p>
+                    </li>
+                    <li id="Info-ZIP_series">
+                        <h5>Info-ZIP</h5>
+                        <p>
+                            <a href="http://www.info-zip.org/">Info-ZIP</a> is a collection of portable software for
+                            handling of .zip archives. It has BSD-like license.
+                        </p>
+                    </li>
+                    <li id="PAQ_series">
+                        <h5>PAQ</h5>
+                        <p>
+                            <a href="http://mattmahoney.net/dc/paq.html">PAQ</a> is a series of GPL-licensed context
+                            mixing file archivers originally developed by Matt Mahoney and also improved by numerous
+                            contributors.
+                        </p>
                     </li>
                 </ul>
             </div>
@@ -352,7 +411,7 @@ bzip,bzip2 1.0.6,-6,2866993,18066482,2465445,1888459,2875739,2891128,1279319,461
 bzip,bzip2 1.0.6,-7,2840343,17979557,2456928,1859576,2862964,2858479,1267135,4547946,4954431,8796175,436841,4068212,54928587,"37,418 (x)",54966005,no
 bzip,bzip2 1.0.6,-8,2821149,17947263,2447745,1832525,2855019,2824794,1253626,4547712,4951657,8713549,439554,4058715,54693308,"37,418 (x)",54730726,no
 bzip,bzip2 1.0.6,-9,2799520,17914392,2441280,1812734,2862526,2802792,1246230,4549759,4940524,8644714,441186,4051112,54506769,"37,418 (x)",54544187,no
-cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,7161756,1912673,811610,1256130,1969208,736373,1642789,3732491,4413876,239434,3525053,29241785,"429,013 (x)",29670798,no
+cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,811610,1256130,1969208,736373,1642789,3732491,4413876,239434,3525053,29241785,"429,013 (x)",29670798,no
             `.trim());
         </script>
         <script>
@@ -491,7 +550,8 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
                     let row = $("<tr></tr>");
                     let scaled_memory_usage = Math.round(result.memory_usage_in_bytes / memory_scale);
                     row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
-                    row.append("<td class=\"text-left\">" + result.program_series + "</td>");
+                    row.append("<td class=\"text-left\"><a href=\"#" + result.program_series + "_series\">" +
+                            result.program_series + "</a></td>");
                     row.append("<td class=\"text-left\">" + result.program_name + "</td>");
                     row.append("<td class=\"text-left\">" + result.program_options + "</td>");
                     row.append("<td class=\"text-right\">" + separated(result.compressed_enwik8_size) + "</td>");
@@ -601,9 +661,11 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
                     $.each(corpus_results, function (index, result) {
                         let row = $("<tr></tr>");
                         row.append("<td class=\"text-right\">" + (index + 1) + "</td>");
+                        let program_series_and_name = "<a href=\"#" + result.program_series + "_series\">" +
+                                result.program_series + "</a>: " + result.program_name;
                         let program_description = result.program_options.trim() ?
-                                (result.program_series + ": " + result.program_name + "<br>" + result.program_options) :
-                                (result.program_series + ": " + result.program_name);
+                                (program_series_and_name + "<br>" + result.program_options) :
+                                program_series_and_name;
                         row.append("<td class=\"text-left\">" + program_description + "</td>");
                         for (let file_name of file_names) {
                             row.append("<td class=\"text-right\">" + separated(result[file_name + "_size"]) + "</td>");

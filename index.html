@@ -17,6 +17,7 @@
                 Contents:
                 <ul id="links">
                     <li><a href="#results">Results</a></li>
+                    <li><a href="#algorithms">Algorithms</a></li>
                     <li><a href="#testsets">Test sets</a></li>
                     <li><a href="#rules">Rules</a></li>
                     <li><a href="#faq">Questions &amp; answers</a></li>
@@ -77,7 +78,9 @@
                                 <th class="border-bottom-0 pb-0 text-right" style="font-size: 1.25rem;">Total size</th>
                                 <th class="border-bottom-0 pb-0 text-center" colspan="2">Time (ns/byte)</th>
                                 <th class="border-bottom-0 pb-0 text-center">Mem</th>
-                                <th class="border-bottom-0 pb-0 text-left">Alg</th>
+                                <th class="border-bottom-0 pb-0 text-left">
+                                    <a href="#algorithms" class="text-white">Alg</a>
+                                </th>
                                 <th class="border-bottom-0 pb-0 text-right">Note</th>
                             </tr>
                             <tr>
@@ -114,6 +117,31 @@
                         </ol>
                     </div>
                 </div>
+            </div>
+            <br/>
+            <div id="algorithms">
+                <h3>Algorithms</h3>
+                Column "Alg" shows the dominant algorithm used in a compression program. Compression algorithms are
+                explained in depth in an excellent online book
+                <a href="http://mattmahoney.net/dc/dce.html">Data Compression Explained</a> so I won't repeat that
+                here. I will only list some algorithms names and their abbreviations:
+                <ul>
+                    <li>CM = Context Mixing</li>
+                    <li>BWT = Burrows-Wheeler Transform</li>
+                    <li>LZ = Lempel-Ziv compressors family</li>
+                    <li>LZ77 = Lempel-Ziv variant 1, published in 1977</li>
+                    <li>LZ78 = Lempel-Ziv variant 2, published in 1978</li>
+                    <li>LZP = Lempel-Ziv Predictive</li>
+                    <li>LZW = Lemper-Ziv-Welch</li>
+                    <li>o&lt;N&gt; = order-N coding</li>
+                    <li>PPM = Prediction by Partial Matching</li>
+                    <li>ROLZ = Reduced Offset LZ</li>
+                </ul>
+                Please note that compression programs often combine multiple compression algorithms, filtering,
+                transforms, etc so the dominant algorithm (or algorithms) is a subjective category and can also be a
+                subject to interpretation and/ or discussion. Some algorithm families (like Lempel-Ziv) have multiple
+                variants so concrete algorithm can be either named after the popular algorithm family it resembles or
+                named with it's unique name.
             </div>
             <br/>
             <div id="testsets">

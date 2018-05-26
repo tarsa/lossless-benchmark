@@ -18,6 +18,7 @@
                 <ul id="links">
                     <li><a href="#results">Results</a></li>
                     <li><a href="#rules">Rules</a></li>
+                    <li><a href="#testsets">Test sets</a></li>
                     <li><a href="#faq">Questions &amp; answers</a></li>
                 </ul>
             </div>
@@ -31,7 +32,7 @@
             <div class="tab-content" id="nav-tab-content">
                 <div class="tab-pane show active" id="nav-enwik-results"
                      role="tabpanel" aria-labelledby="nav-enwik-results-tab">
-                    <h3 class="text-center">Results for enwik8 &amp; enwik9</h3>
+                    <h3 class="text-center">Results for <a href="#testset_enwik">enwik8 &amp; enwik9</a></h3>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -134,6 +135,41 @@
                         Decompressor must be self-contained. It must not rely on any data that is not contained in
                         decompressor package. Any libraries that are not standard libraries or are not available in
                         stock OS install must also be placed in decompressor package (in source or executable form).
+                    </li>
+                </ul>
+            </div>
+            <br/>
+            <div id="testsets">
+                <h3>Test sets:</h3>
+                <ul>
+                    <li id="testset_enwik">
+                        <a href="http://mattmahoney.net/dc/textdata.html">enwik8 &amp; enwik9</a> are the test files
+                        used in <a href="http://mattmahoney.net/dc/text.html">Large Text Compression Benchmark</a>
+                        created by <a href="http://mattmahoney.net/">Matt Mahoney</a>.
+                    </li>
+                    <li id="testset_calgary">
+                        <a href="https://en.wikipedia.org/wiki/Calgary_corpus">Calgary corpus</a> is a set of test files
+                        created by Ian Witten, Tim Bell and John Cleary from University of Calgary and is currently
+                        avaiable <a href="http://corpus.canterbury.ac.nz/descriptions/#calgary">here</a>.
+                    </li>
+                    <li id="testset_canterbury">
+                        <a href="https://en.wikipedia.org/wiki/Canterbury_corpus">Canterbury corpus</a> is a set of test
+                        files created at University of Canterbury and is currently available
+                        <a href="http://corpus.canterbury.ac.nz/">here</a>.
+                    </li>
+                    <li id="testset_max_comp">
+                        <a href="https://www.maximumcompression.com/">Maximum Compression</a> is a lossless data 
+                        compression benchmark created by Werner Bergman. It has two benchmark modes - single file
+                        compression (SFC) and multiple files compression (MFC). In SFC files are compressed
+                        independently and only compression ratio is tracked. In MFC files are compressed all at once and
+                        additionally compression and decompression times are published and analyzed. Only files for SFC
+                        are public and are available
+                        <a href="https://www.maximumcompression.com/data/files/index.html">here</a>.
+                    </li>
+                    <li id="testset_silesia">
+                        <a href="http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia">Silesia compression corpus</a>
+                        was developed by Sebastian Deorowicz et al. It is a much newer corpus than Calgary corpus or
+                        Canterbury corpus and aims to reflect data types in common use when creating the corpus.
                     </li>
                 </ul>
             </div>
@@ -463,7 +499,7 @@ cmix+precomp,"cmix v15, precomp v0.4.6",precomp v0.4.6 -cn | cmix v15,1840392,71
                 headers.append("<th class=\"text-center\" id=\"" + id + "_total_size_column\">Total size</th>");
                 let section = String.raw`
                 <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
-                    <h3 class="text-center">Results for ${name}</h3>
+                    <h3 class="text-center">Results for <a href="#testset_${id}">${name}</a></h3>
                     <form>
                         <div class="row">
                             <div class="col form-group">

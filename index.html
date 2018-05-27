@@ -14,6 +14,7 @@
                 font-weight: 700;
             }
         </style>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </head>
     <body>
         <div class="container" style="max-width: 95%;">
@@ -40,6 +41,7 @@
                 <div class="tab-pane show active" id="nav-enwik-results"
                      role="tabpanel" aria-labelledby="nav-enwik-results-tab">
                     <h3 class="text-center">Results for <a href="#testset_enwik">enwik8 &amp; enwik9</a></h3>
+                    <div id="enwik_plot"></div>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -471,6 +473,34 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 return Number(number_like).toLocaleString();
             }
             // common display functions
+            function plot_results(corpus_id, filtered_results, field_name) {
+                let plot_div = $("#" + corpus_id + "_plot")[0];
+                let x = [];
+                let y = [];
+                let text = [];
+                $.each(filtered_results, function (index, result) {
+                    x.push("#" + (index + 1) + " " + result.program_series); // unique name
+                    y.push(result[field_name]);
+                    text.push(result.program_name + "<br>options: " + result.program_options);
+                });
+                let data = [{
+                    x: x,
+                    y: y,
+                    type: "bar",
+                    text: text
+                }];
+                let layout = {
+                    title: "Selected result field: <b>" + field_name + "</b>"
+                };
+                Plotly.newPlot(plot_div, data, layout);
+            }
+            function attach_plot_relayout(corpus_id) {
+                let nav_tab = $("#nav-" + corpus_id + "-results-tab");
+                let plot_div = $("#" + corpus_id + "_plot")[0];
+                nav_tab.on("shown.bs.tab", function (e) {
+                    Plotly.Plots.resize(plot_div); 
+                });
+            }
             function sorted_series(input_series) {
                 let series = Array.from(input_series);
                 series.sort(function (a, b) {
@@ -616,7 +646,9 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                             "</a></td>");
                     body.append(row);
                 });
+                plot_results("enwik", enwik_results, sorted_field);
             }
+            attach_plot_relayout("enwik");
             fill_enwik_table();
             // displaying other corporas results
             $("#nav-enwik-results-tab").after(Array.from(names, function ([id, name]) {
@@ -639,6 +671,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 let section = String.raw`
                 <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
                     <h3 class="text-center">Results for <a href="#testset_${id}">${name}</a></h3>
+                    <div id="${id}_plot"></div>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -740,7 +773,9 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                         }
                         body.append(row);
                     });
+                    plot_results(id, corpus_results, sorted_field);
                 }
+                attach_plot_relayout(id);
             }
             $("#info_modal").on("show.bs.modal", function (event) {
                 let button = $(event.relatedTarget);

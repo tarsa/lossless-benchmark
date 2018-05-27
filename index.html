@@ -40,8 +40,8 @@
                 </div>
             </nav>
             <div class="tab-content" id="nav-tab-content">
-                <div class="tab-pane show active" id="nav-enwik-results"
-                     role="tabpanel" aria-labelledby="nav-enwik-results-tab">
+                <div class="tab-pane show active" id="nav-enwik-results" role="tabpanel"
+                     aria-labelledby="nav-enwik-results-tab" data-field_name="total_compressed_size">
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -509,10 +509,11 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 });
                 return new Set(series);
             }
-            function attach_sorted_column_handlers(sorted_columns_ids_by_field_name, fill_table_function) {
+            function attach_sorted_column_handlers(corpus_id, sorted_columns_ids_by_field_name, fill_table_function) {
                 for (let [field_name, column_id] of sorted_columns_ids_by_field_name) {
                     $(escape_selector("#" + column_id)).click(function () {
-                        fill_table_function(field_name);
+                        $("#nav-" + corpus_id + "-results").data("field_name", field_name);
+                        fill_table_function();
                     });
                 }
             }
@@ -604,7 +605,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 ["compressed_enwik9_size", "enwik9_size_column"],
                 ["total_compressed_size", "enwik_total_size_column"]
             ]);
-            attach_sorted_column_handlers(enwik_sorted_columns_ids_by_field_name, fill_enwik_results);
+            attach_sorted_column_handlers("enwik", enwik_sorted_columns_ids_by_field_name, fill_enwik_results);
             attach_nav_tab_handler("enwik", fill_enwik_results);
             let shown_series_selector = $("#enwik_shown_series");
             let collapsed_series_selector = $("#enwik_collapsed_series");
@@ -615,8 +616,8 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
             });
             setup_selectors(enwik_program_series, shown_series_selector, collapsed_series_selector,
                     outdated_series_selector, fill_enwik_results);
-            function fill_enwik_results(sorted_field) {
-                sorted_field = sorted_field || "total_compressed_size";
+            function fill_enwik_results() {
+                let sorted_field = $("#nav-enwik-results").data("field_name");
                 emphasize_sorted_column(sorted_field, enwik_sorted_columns_ids_by_field_name);
                 sort_by_field_length_and_value(enwik_results_all, sorted_field);
                 let enwik_results = filtered_corpus_results(enwik_results_all, shown_series_selector,
@@ -666,7 +667,8 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 headers.append("<th class=\"text-center\" id=\"" + id + "_total_size_column\">Total size</th>");
                 headers.append("<th class=\"text-left\">Info</th>");
                 let section = String.raw`
-                <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
+                <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab"
+                     data-field_name="total_compressed_size">
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -724,15 +726,15 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 }
                 corpus_sorted_columns_by_field.set("total_without_decompressor", id + "_total_without_decomp_column");
                 corpus_sorted_columns_by_field.set("total_compressed_size", id + "_total_size_column");
-                attach_sorted_column_handlers(corpus_sorted_columns_by_field, fill_corpus_results);
+                attach_sorted_column_handlers(id, corpus_sorted_columns_by_field, fill_corpus_results);
                 attach_nav_tab_handler(id, fill_corpus_results);
                 let shown_series_selector = $("#" + id + "_shown_series");
                 let collapsed_series_selector = $("#" + id + "_collapsed_series");
                 let outdated_series_selector = $("#" + id + "_outdated_series");
                 setup_selectors(corpus_program_series, shown_series_selector, collapsed_series_selector,
                         outdated_series_selector, fill_corpus_results);
-                function fill_corpus_results(sorted_field) {
-                    sorted_field = sorted_field || "total_compressed_size";
+                function fill_corpus_results() {
+                    let sorted_field = $("#nav-" + id + "-results").data("field_name");
                     emphasize_sorted_column(sorted_field, corpus_sorted_columns_by_field);
                     sort_by_field_length_and_value(corpus_results_all, sorted_field);
                     let corpus_results = filtered_corpus_results(corpus_results_all, shown_series_selector,

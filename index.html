@@ -498,7 +498,10 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 let nav_tab = $("#nav-" + corpus_id + "-results-tab");
                 let plot_div = $("#" + corpus_id + "_plot")[0];
                 nav_tab.on("shown.bs.tab", function (e) {
-                    Plotly.Plots.resize(plot_div); 
+                    Plotly.Plots.resize(plot_div);
+                });
+                $(window).resize(function () {
+                    Plotly.Plots.resize(plot_div);
                 });
             }
             function sorted_series(input_series) {

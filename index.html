@@ -31,6 +31,8 @@
                 </ul>
             </div>
             <br/>
+            <h3 id="results_title" class="text-center"><!-- filled in script --></h3>
+            <div id="results_plot"></div>
             <nav id="results">
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-enwik-results-tab" href="#nav-enwik-results" role="tab"
@@ -40,8 +42,6 @@
             <div class="tab-content" id="nav-tab-content">
                 <div class="tab-pane show active" id="nav-enwik-results"
                      role="tabpanel" aria-labelledby="nav-enwik-results-tab">
-                    <h3 class="text-center">Results for <a href="#testset_enwik">enwik8 &amp; enwik9</a></h3>
-                    <div id="enwik_plot"></div>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -471,8 +471,8 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 return Number(number_like).toLocaleString();
             }
             // common display functions
-            function plot_results(corpus_id, filtered_results, field_name) {
-                let plot_div = $("#" + corpus_id + "_plot")[0];
+            function plot_results(filtered_results, field_name) {
+                let plot_div = $("#results_plot")[0];
                 let x = [];
                 let y = [];
                 let text = [];
@@ -492,14 +492,10 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 };
                 Plotly.newPlot(plot_div, data, layout);
             }
-            function attach_plot_relayout(corpus_id) {
+            function attach_nav_tab_handler(corpus_id, action) {
                 let nav_tab = $("#nav-" + corpus_id + "-results-tab");
-                let plot_div = $("#" + corpus_id + "_plot")[0];
                 nav_tab.on("shown.bs.tab", function (e) {
-                    Plotly.Plots.resize(plot_div);
-                });
-                $(window).resize(function () {
-                    Plotly.Plots.resize(plot_div);
+                    action();
                 });
             }
             function sorted_series(input_series) {
@@ -608,17 +604,18 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 ["compressed_enwik9_size", "enwik9_size_column"],
                 ["total_compressed_size", "enwik_total_size_column"]
             ]);
-            attach_sorted_column_handlers(enwik_sorted_columns_ids_by_field_name, fill_enwik_table);
+            attach_sorted_column_handlers(enwik_sorted_columns_ids_by_field_name, fill_enwik_results);
+            attach_nav_tab_handler("enwik", fill_enwik_results);
             let shown_series_selector = $("#enwik_shown_series");
             let collapsed_series_selector = $("#enwik_collapsed_series");
             let outdated_series_selector = $("#enwik_outdated_series");
             let memory_scale_selector = $("#memory_scale_selector");
             memory_scale_selector.change(function () {
-                fill_enwik_table();
+                fill_enwik_results();
             });
             setup_selectors(enwik_program_series, shown_series_selector, collapsed_series_selector,
-                    outdated_series_selector, fill_enwik_table);
-            function fill_enwik_table(sorted_field) {
+                    outdated_series_selector, fill_enwik_results);
+            function fill_enwik_results(sorted_field) {
                 sorted_field = sorted_field || "total_compressed_size";
                 emphasize_sorted_column(sorted_field, enwik_sorted_columns_ids_by_field_name);
                 sort_by_field_length_and_value(enwik_results_all, sorted_field);
@@ -647,10 +644,9 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                             "</a></td>");
                     body.append(row);
                 });
-                plot_results("enwik", enwik_results, sorted_field);
+                $("#results_title").html("Results for <a href=\"#testset_enwik\">enwik8 &amp; enwik9</a>");
+                plot_results(enwik_results, sorted_field);
             }
-            attach_plot_relayout("enwik");
-            fill_enwik_table();
             // displaying other corporas results
             $("#nav-enwik-results-tab").after(Array.from(names, function ([id, name]) {
                 return "<a class=\"nav-item nav-link\" id=\"nav-" + id + "-results-tab\" href=\"#nav-" + id +
@@ -671,8 +667,6 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 headers.append("<th class=\"text-left\">Info</th>");
                 let section = String.raw`
                 <div class="tab-pane" id="nav-${id}-results" role="tabpanel" aria-labelledby="nav-${id}-results-tab">
-                    <h3 class="text-center">Results for <a href="#testset_${id}">${name}</a></h3>
-                    <div id="${id}_plot"></div>
                     <form>
                         <div class="row">
                             <div class="col form-group">
@@ -730,13 +724,14 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 }
                 corpus_sorted_columns_by_field.set("total_without_decompressor", id + "_total_without_decomp_column");
                 corpus_sorted_columns_by_field.set("total_compressed_size", id + "_total_size_column");
-                attach_sorted_column_handlers(corpus_sorted_columns_by_field, fill_corpus_table);
+                attach_sorted_column_handlers(corpus_sorted_columns_by_field, fill_corpus_results);
+                attach_nav_tab_handler(id, fill_corpus_results);
                 let shown_series_selector = $("#" + id + "_shown_series");
                 let collapsed_series_selector = $("#" + id + "_collapsed_series");
                 let outdated_series_selector = $("#" + id + "_outdated_series");
                 setup_selectors(corpus_program_series, shown_series_selector, collapsed_series_selector,
-                        outdated_series_selector, fill_corpus_table);
-                function fill_corpus_table(sorted_field) {
+                        outdated_series_selector, fill_corpus_results);
+                function fill_corpus_results(sorted_field) {
                     sorted_field = sorted_field || "total_compressed_size";
                     emphasize_sorted_column(sorted_field, corpus_sorted_columns_by_field);
                     sort_by_field_length_and_value(corpus_results_all, sorted_field);
@@ -774,10 +769,11 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                         }
                         body.append(row);
                     });
-                    plot_results(id, corpus_results, sorted_field);
+                    $("#results_title").html("Results for <a href=\"#testset_" + id + "\">" + names.get(id) + "</a>");
+                    plot_results(corpus_results, sorted_field);
                 }
-                attach_plot_relayout(id);
             }
+            fill_enwik_results(); // needs to override all previous fills that happened on page load
             $("#info_modal").on("show.bs.modal", function (event) {
                 let button = $(event.relatedTarget);
                 let program_series_and_name = button.data("program_series_and_name");
@@ -785,6 +781,10 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 let modal = $(this);
                 modal.find("#info_modal_title").text(program_series_and_name);
                 modal.find("#info_modal_content").html(html_info);
+            });
+            $(window).resize(function () {
+                let plot_div = $("#results_plot")[0];
+                Plotly.Plots.resize(plot_div);
             });
         </script>
         <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" 

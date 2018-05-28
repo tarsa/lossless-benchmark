@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         <link rel="stylesheet"
               href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
               integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
@@ -31,9 +31,29 @@
                 </ul>
             </div>
             <br/>
-            <h3 id="results_title" class="text-center"><!-- filled in script --></h3>
+            <h3 id="results_title" class="text-center">[filled in script]</h3>
+            <form class="row justify-content-center">
+                <div class="radio col">
+                    <label>
+                        <input type="radio" name="plot_mode" value="plot_sizes">
+                        Plot sizes
+                    </label>
+                </div>
+                <div class="radio col">
+                    <label>
+                        <input type="radio" name="plot_mode" value="plot_percentages">
+                        Plot percentages
+                    </label>
+                </div>
+                <div class="radio col">
+                    <label>
+                        <input type="radio" name="plot_mode" value="plot_ratios" checked>
+                        Plot ratios
+                    </label>
+                </div>
+            </form>
             <div id="results_plot"></div>
-            <nav id="results">
+            <nav id="results" data-selected_corpus_id="enwik">
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-enwik-results-tab" href="#nav-enwik-results" role="tab"
                        data-toggle="tab" aria-controls="nav-enwik-results" aria-selected="true">enwik8 &amp; enwik9</a>
@@ -483,15 +503,29 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 return Number(number_like).toLocaleString();
             }
             // common display functions
-            function plot_results(filtered_results, field_name) {
+            function plot_results(copy_result, filtered_results, field_name) {
+                assert(copy_result !== null);
+                let plot_mode = $('input[name=plot_mode]:checked').val();
                 let plot_div = $("#results_plot")[0];
                 let x = [];
                 let y = [];
                 let text = [];
                 $.each(filtered_results, function (index, result) {
                     x.push("#" + (index + 1) + " " + result.program_series); // unique name
-                    y.push(result[field_name]);
-                    text.push(result.program_name + "<br>options: " + result.program_options);
+                    let size = result[field_name];
+                    let ratio = copy_result[field_name] / result[field_name];
+                    let percentage = 100.0 / ratio;
+                    if (plot_mode === "plot_sizes") {
+                        y.push(size);
+                    } else if (plot_mode === "plot_percentages") {
+                        y.push(percentage);
+                    } else {
+                        assert(plot_mode === "plot_ratios");
+                        y.push(ratio);
+                    }
+                    text.push(result.program_name + "<br>Options: " + result.program_options + "<br>Size: " +
+                         separated(size) + "<br>Percentage: " + percentage.toFixed(3) + "<br>Ratio: " +
+                         ratio.toFixed(3));
                 });
                 let data = [{
                     x: x,
@@ -507,6 +541,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
             function attach_nav_tab_handler(corpus_id, action) {
                 let nav_tab = $("#nav-" + corpus_id + "-results-tab");
                 nav_tab.on("shown.bs.tab", function (e) {
+                    $("#results").data("selected_corpus_id", corpus_id);
                     action();
                 });
             }
@@ -547,6 +582,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
             function setup_selectors(corpus_id, corpus_program_series,
                     shown_series_selector, collapsed_series_selector,
                     outdated_series_selector, update_action) {
+                assert(corpus_program_series.has("COPY"));
                 setup_selectors_button("#" + corpus_id + "_select_all_collapsed", collapsed_series_selector, true);
                 setup_selectors_button("#" + corpus_id + "_select_none_collapsed", collapsed_series_selector, false);
                 setup_selectors_button("#" + corpus_id + "_select_all_outdated", outdated_series_selector, true);
@@ -615,10 +651,15 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
             // displaying enwiks results
             $("#enwik_download").attr("href",
                     URL.createObjectURL(new Blob([enwik_results_csv], {type: "application/csv"})));
+            let enwik_result_of_copy = null;
             let enwik_program_series = new Set();
             for (let result of enwik_results_all) {
                 assert(result.outdated === "yes" || result.outdated === "no");
                 enwik_program_series.add(result.program_series);
+                if (result.program_series === "COPY") {
+                    assert(enwik_result_of_copy === null);
+                    enwik_result_of_copy = result;
+                }
             }
             enwik_program_series = sorted_series(enwik_program_series);
             $("#enwik_results_dump").val(JSON.stringify(enwik_results_all));
@@ -668,7 +709,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                     body.append(row);
                 });
                 $("#results_title").html("Results for <a href=\"#testset_enwik\">enwik8 &amp; enwik9</a>");
-                plot_results(enwik_results, sorted_field);
+                plot_results(enwik_result_of_copy, enwik_results, sorted_field);
             }
             // displaying other corporas results
             $("#nav-enwik-results-tab").after(Array.from(names, function ([id, name]) {
@@ -747,10 +788,15 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 $("#" + id + "_download").attr("href",
                         URL.createObjectURL(new Blob([corpus_results_csv], {type: "application/csv"})));
                 let corpus_results_all = $.csv.toObjects(corpus_results_csv);
+                let corpus_result_of_copy = null;
                 let corpus_program_series = new Set();
                 for (let result of corpus_results_all) {
                     assert(result.outdated === "yes" || result.outdated === "no");
                     corpus_program_series.add(result.program_series);
+                    if (result.program_series === "COPY") {
+                        assert(corpus_result_of_copy === null);
+                        corpus_result_of_copy = result;
+                    }
                 }
                 corpus_program_series = sorted_series(corpus_program_series);
                 $("#" + id + "_results_dump").val(JSON.stringify(corpus_results_all));
@@ -806,10 +852,15 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                         body.append(row);
                     });
                     $("#results_title").html("Results for <a href=\"#testset_" + id + "\">" + names.get(id) + "</a>");
-                    plot_results(corpus_results, sorted_field);
+                    plot_results(corpus_result_of_copy, corpus_results, sorted_field);
                 }
             }
             fill_enwik_results(); // needs to override all previous fills that happened on page load
+            $("input:radio[name=plot_mode]").click(function() {
+                let id = $("#results").data("selected_corpus_id");
+                let outdated_series_selector = $("#" + id + "_outdated_series");
+                outdated_series_selector.change();
+            });
             $("#info_modal").on("show.bs.modal", function (event) {
                 let button = $(event.relatedTarget);
                 let program_series_and_name = button.data("program_series_and_name");

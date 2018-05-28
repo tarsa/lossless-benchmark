@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col form-group">
                                 <label for="enwik_shown_series">Show compressor series</label>
-                                <select multiple class="form-control" id="enwik_shown_series">
+                                <select multiple class="form-control" id="enwik_shown_series" style="height: 100%;">
                                     <!-- filled in script -->
                                 </select>
                             </div>
@@ -55,12 +55,24 @@
                                 <select multiple class="form-control" id="enwik_collapsed_series">
                                     <!-- filled in script -->
                                 </select>
+                                <div class="row">
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="enwik_select_all_collapsed">Select all</button>
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="enwik_select_none_collapsed">Deselect all</button>
+                                </div>
                             </div>
                             <div class="col form-group">
                                 <label for="enwik_outdated_series">Show outdated results</label>
                                 <select multiple class="form-control" id="enwik_outdated_series">
                                     <!-- filled in script -->
                                 </select>
+                                <div class="row">
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="enwik_select_all_outdated">Select all</button>
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="enwik_select_none_outdated">Deselect all</button>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -526,9 +538,19 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 });
                 return found_options;
             }
-            function setup_selectors(corpus_program_series,
+            function setup_selectors_button(button_id, selector, selected_state) {
+                $(button_id).click(function () {
+                    selector.find("option").prop("selected", selected_state);
+                    selector.change();
+                });
+            }
+            function setup_selectors(corpus_id, corpus_program_series,
                     shown_series_selector, collapsed_series_selector,
                     outdated_series_selector, update_action) {
+                setup_selectors_button("#" + corpus_id + "_select_all_collapsed", collapsed_series_selector, true);
+                setup_selectors_button("#" + corpus_id + "_select_none_collapsed", collapsed_series_selector, false);
+                setup_selectors_button("#" + corpus_id + "_select_all_outdated", outdated_series_selector, true);
+                setup_selectors_button("#" + corpus_id + "_select_none_outdated", outdated_series_selector, false);
                 for (let program_series of corpus_program_series) {
                     shown_series_selector.append("<option selected=\"selected\">" + program_series + "</option>");
                 }
@@ -614,7 +636,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
             memory_scale_selector.change(function () {
                 fill_enwik_results();
             });
-            setup_selectors(enwik_program_series, shown_series_selector, collapsed_series_selector,
+            setup_selectors("enwik", enwik_program_series, shown_series_selector, collapsed_series_selector,
                     outdated_series_selector, fill_enwik_results);
             function fill_enwik_results() {
                 let sorted_field = $("#nav-enwik-results").data("field_name");
@@ -673,7 +695,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                         <div class="row">
                             <div class="col form-group">
                                 <label for="${id}_shown_series">Show compressor series</label>
-                                <select multiple class="form-control" id="${id}_shown_series">
+                                <select multiple class="form-control" id="${id}_shown_series" style="height: 100%;">
                                     <!-- filled in script -->
                                 </select>
                             </div>
@@ -682,12 +704,24 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                                 <select multiple class="form-control" id="${id}_collapsed_series">
                                     <!-- filled in script -->
                                 </select>
+                                <div class="row">
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="${id}_select_all_collapsed">Select all</button>
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="${id}_select_none_collapsed">Deselect all</button>
+                                </div>
                             </div>
                             <div class="col form-group">
                                 <label for="${id}_outdated_series">Show outdated results</label>
                                 <select multiple class="form-control" id="${id}_outdated_series">
                                     <!-- filled in script -->
                                 </select>
+                                <div class="row">
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="${id}_select_all_outdated">Select all</button>
+                                    <button type="button" class="btn btn-secondary col-6"
+                                         id="${id}_select_none_outdated">Deselect all</button>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -731,7 +765,7 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                 let shown_series_selector = $("#" + id + "_shown_series");
                 let collapsed_series_selector = $("#" + id + "_collapsed_series");
                 let outdated_series_selector = $("#" + id + "_outdated_series");
-                setup_selectors(corpus_program_series, shown_series_selector, collapsed_series_selector,
+                setup_selectors(id, corpus_program_series, shown_series_selector, collapsed_series_selector,
                         outdated_series_selector, fill_corpus_results);
                 function fill_corpus_results() {
                     let sorted_field = $("#nav-" + id + "-results").data("field_name");

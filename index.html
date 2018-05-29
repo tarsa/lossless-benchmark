@@ -523,9 +523,9 @@ cmix,"cmix v15, precomp v0.4.6",precomp -cn | cmix,1840392,7161756,1912673,81161
                         assert(plot_mode === "plot_ratios");
                         y.push(ratio);
                     }
-                    text.push(result.program_name + "<br>Options: " + result.program_options + "<br>Size: " +
-                         separated(size) + "<br>Percentage: " + percentage.toFixed(3) + "<br>Ratio: " +
-                         ratio.toFixed(3));
+                    text.push(result.program_name + "<br>Options: " + result.program_options + "<br>Compressed size: " +
+                         separated(size) + " bytes<br>Percentage: " + percentage.toFixed(3) + 
+                         "% of original file size<br>Ratio: " + ratio.toFixed(3) + " : 1");
                 });
                 let data = [{
                     x: x,
